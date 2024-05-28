@@ -1,7 +1,11 @@
-@props(['name' => '', 'value' => '',])
+{{-- @props(['name' => '',]) or @props(['name' => '', 'value' => '',])
 
 
-<input id="{{ $name }}" type="hidden" {{ $attributes }}">
+<input id="{{ $name }}" type="hidden" {{ $attributes }}>
+<trix-editor input="{{ $name }}"></trix-editor> --}}
+
+
+<input id="{{ $name }}" type="hidden" {{ $attributes }}>
 <trix-editor input="{{ $name }}"></trix-editor>
 
 @once
