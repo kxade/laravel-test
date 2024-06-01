@@ -2,6 +2,6 @@
 
 
 <label {{ $attributes
-    ->class(['mb-2', $required ? 'required' : ''])}}>
+    ->class(['mb-1', $required ? 'required' : ''])}}>
     {{ $slot }}
 </label>
