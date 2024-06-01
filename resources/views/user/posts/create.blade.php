@@ -13,6 +13,10 @@
         </x-slot>
     </x-title>
     
-    <x-post.form action="{{ route('user.posts.store') }}" method="post" />
+    <x-post.form action="{{ route('user.posts.store') }}" method="post">
+        <x-button type="submit">
+            {{ __('Создать пост') }}
+        </x-button>
+    </x-post.form>
 
 @endsection
