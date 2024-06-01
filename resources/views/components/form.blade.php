@@ -9,9 +9,8 @@
         @method($method)
     @endunless
 
-    @if($method !== 'GET') {
+    @if($method !== 'GET')
         @csrf 
-    }
     @endif
 
     {{ $slot }}
