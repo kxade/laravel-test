@@ -36,12 +36,12 @@ class BlogController extends Controller
     }
 
     public function show($post) {
-        $post = (object) [
-            'id' => 1,
-            'title' => 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Quo, a.',
-            'content' => 'Lorem ipsum <strong>dolor</strong> sit amet, consectetur adipisicing elit. Tempora laudantium, nemo nihil beatae illo vel?',
-        ];
         
+        $post = Post::query()->findOrFail($post);
+        
+        // if (is_Null($post)) {
+        //     abort(404);
+        // } 
         return view('blog.show', compact('post'));
     }
 }
