@@ -24,7 +24,7 @@ return new class extends Migration
             // $table->foreign('category_id')->references('id')->on('categories')->onDelete('set null');
             // $table->foreign('user_id')->references('id')->on('users')->onDelete('set null');
             // now the same, but shorter:
-            $table->foreignId('category_id')->constrained()->cascadeOnDelete();
+            $table->foreignId('category_id')->constrained()->cascadeOnDelete()->nullable();
             $table->foreignId('user_id')->constrained()->cascadeOnDelete();
         });
     }

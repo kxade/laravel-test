@@ -21,9 +21,12 @@ class Post extends Model
 
     protected $casts = [
         'published' => 'boolean',
+        'published_at' => 'datetime',
     ];
 
-    protected $dates = [
-        'published_at',
-    ];
+
+    public function isPublished(): bool {
+        return $this->published &&  $this->published_at; 
+    }
+
 }
