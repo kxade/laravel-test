@@ -36,6 +36,7 @@ class BlogController extends Controller
             'search' => ['nullable', 'string', 'max:50'],
             'from_date' => ['nullable', 'string', 'date'],
             'to_date' => ['nullable', 'string', 'date', 'after:from_date'],
+            'tag' => ['nullable', 'string', 'max:20'],
         ]);
 
 
@@ -61,6 +62,10 @@ class BlogController extends Controller
         if ($search = $validated['search'] ?? null) {
             $query->where('title', 'ilike', "%{$search}%")
                 ->orWhere('content', 'ilike', "%{$search}%");
+        }
+
+        if ($tag = $validated['tag'] ?? null) {
+            $query->whereJsonContains('tags', $tag);
         }
         
 
