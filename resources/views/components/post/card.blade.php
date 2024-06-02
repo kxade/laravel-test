@@ -5,8 +5,9 @@
                 {{ $post->title }}
             </a>
         </h2>
+        {{ $post->id}}
         <div class="small text-muted">
-            {{ now()->format('d.m.Y h:m:s') }}
+            {{ $post->published_at->format('d.m.Y h:m:s') }}
         </div>
     </x-card-body>
 </x-card>

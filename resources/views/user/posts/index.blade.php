@@ -23,9 +23,15 @@
                         {{ $post->title }}
                     </a>
                 </h2>
+
+                <div class="small text-muted">
+                    {{ $post->published_at->format('d.m.Y h:m:s') }}
+                </div>
             </div>
 
         @endforeach
+
+        {{ $posts->links() }}
     @endif
 
 @endsection
