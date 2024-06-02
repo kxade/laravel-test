@@ -30,7 +30,7 @@ class BlogController extends Controller
         // $offset = $limit * ($page - 1);
         // $posts = Post::query()->limit($limit)->offset($offset)->get(['id', 'title', 'content', 'published_at']);
         
-        $posts = Post::query()->orderBy('published_at', 'desc');
+        $posts = Post::query()->orderBy('published_at', 'desc')->paginate(12, ['id', 'title', 'published_at']);
 
         return view('blog.index', compact('posts', 'categories'));
     }

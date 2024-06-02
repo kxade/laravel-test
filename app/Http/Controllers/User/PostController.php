@@ -13,7 +13,7 @@ use Illuminate\Validation\ValidationException;
 class PostController extends Controller
 {
     public function index() {
-        $posts = Post::query();
+        $posts = Post::query()->paginate(12);
 
         return view('user.posts.index', compact('posts'));
     }
