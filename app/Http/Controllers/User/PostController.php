@@ -27,8 +27,18 @@ class PostController extends Controller
         $validated = $request->validate([
             'title' => ['required', 'string', 'max:100'],
             'content' => ['required', 'string', 'max:1000'],
+            'published_at' => ['nullable', 'string', 'date'],
+            'published' => ['nullable', 'boolean'],
         ]);
         
+        $post = Post::query()->create([
+            'user_id' => User::query()->value('id'),
+            'category_id' => 1,
+            'title' => $validated['title'],
+            'content' => $validated['content'],
+            'published_at' => new Carbon($validated['published_at'] ?? null),
+            'published' => $validated['published'] ?? false,
+        ]);
         // $validated = $request->validated(); use with custom request class
 
         
@@ -45,6 +55,7 @@ class PostController extends Controller
         //     ]);
         // }
 
+        dd($post);
 
 
         return redirect()->route('user.posts.show', 1);
