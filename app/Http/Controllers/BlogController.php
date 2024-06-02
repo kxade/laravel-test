@@ -36,8 +36,14 @@ class BlogController extends Controller
     }
 
     public function show($post) {
-        
-        $post = Post::query()->findOrFail($post);
+
+        $post = cache()->remember(
+            key: "posts.{$post}", 
+            ttl: now()->addHour(), 
+            callback: function() use ($post) {
+                return Post::query()->findOrFail($post);
+            });
+
         
         // if (is_Null($post)) {
         //     abort(404);
