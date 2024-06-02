@@ -14,7 +14,7 @@
                 </a>                
             </x-slot>
         </x-card-header>
-
+        <x-errors />
         <x-card-body>
             <x-form action="{{ route('register.store')}}" method="POST">
                 <x-form-item>
