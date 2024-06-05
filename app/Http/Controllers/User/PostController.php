@@ -8,22 +8,24 @@ use App\Models\Post;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
-use Illuminate\Validation\ValidationException;
+
 
 class PostController extends Controller
 {
-    public function index() {
+    public function index() 
+    {
         $posts = Post::query()->paginate(12);
 
         return view('user.posts.index', compact('posts'));
     }
 
-    public function create() {
+    public function create() 
+    {
         return view('user.posts.create');
     }
 
-    public function store(StorePostRequest $request) {
-        
+    public function store(StorePostRequest $request) 
+    {
         $validated = $request->validate([
             'title' => ['required', 'string', 'max:100'],
             'content' => ['required', 'string', 'max:1000'],
@@ -39,51 +41,26 @@ class PostController extends Controller
             'published_at' => new Carbon($validated['published_at'] ?? null),
             'published' => $validated['published'] ?? false,
         ]);
-        // $validated = $request->validated(); use with custom request class
-
-        
-        // $validator = validator($request->all(), [
-        //     'title' => ['required', 'string', 'max:100'],
-        //     'content' => ['required', 'string', 'max:1000'],
-        // ]);
-
-        // $validated = $validator->validate();
-
-        // if (true) {
-        //     throw ValidationException::withMessages([
-        //         'account' => __('Недостаточно средств'),
-        //     ]);
-        // }
-
-        dd($post);
-
 
         return redirect()->route('user.posts.show', 1);
     }
 
-    public function show($post) {
-        $post = (object) [
-            'id' => 1,
-            'title' => 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Quo, a.',
-            'content' => 'Lorem ipsum <strong>dolor</strong> sit amet, consectetur adipisicing elit. Tempora laudantium, nemo nihil beatae illo vel?',
-        ];
+    public function show($post_id) 
+    {
+        $post = Post::query()->findOrFail($post_id);
 
         return view('user.posts.show', compact('post'));
     }
 
-    public function edit($post) {
-        $post = (object) [
-            'id' => 1,
-            'title' => 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Quo, a.',
-            'content' => 'Lorem ipsum <strong>dolor</strong> sit amet, consectetur adipisicing elit. Tempora laudantium, nemo nihil beatae illo vel?',
-        ];
+    public function edit($post_id) 
+    {
+        $post = Post::query()->findOrFail($post_id);
         
-
         return view('user.posts.edit', compact('post'));
     }
 
-    public function update(Request $request, $post) {
-
+    public function update(Request $request, $post) 
+    {
         $validated = $request->validate([
             'title' => ['required', 'string', 'max:100'],
             'content' => ['required', 'string', 'max:1000'],
@@ -91,17 +68,11 @@ class PostController extends Controller
             'published' => ['nullable', 'boolean'],
         ]);
 
-        dd($validated);
-
-        // return redirect()->route('user.posts.show', $post);
         return redirect()->back();
     }
 
-    public function destroy($post) {
+    public function destroy($post) 
+    {
         return redirect()->route('user.posts');
-    }
-
-    public function like() {
-        return 'Лайк + 1';
     }
 }

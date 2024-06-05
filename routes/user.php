@@ -4,7 +4,6 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\User\PostController;
 
 
-// Route::prefix('user')->as('user.')->group(function () {
 Route::prefix('user')->group(function () {
     Route::redirect('/', 'user/posts')->name('user');
 
@@ -22,5 +21,4 @@ Route::prefix('user')->group(function () {
 
     Route::delete('posts/{post}/delete', [PostController::class, 'destroy'])->name('user.posts.destroy');
 
-    Route::put('posts/{post}/like', [PostController::class, 'like'])->name('user.posts.like');
 });

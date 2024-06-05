@@ -25,8 +25,7 @@ class ActiveMiddleware
 
     protected function isActive(Request $request)
     {
-        return true;
-        // $user = $request->user();
-        // return $user->active();
+        $user = $request->user();
+        return $user->active();
     }
 }

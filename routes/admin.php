@@ -21,11 +21,4 @@ Route::prefix('admin')->as('admin.')->middleware(['admin'])->group(function () {
 
     Route::delete('posts/{post}/delete', [PostController::class, 'destroy'])->name('posts.destroy');
 
-    Route::put('posts/{post}/like', [PostController::class, 'like'])->name('posts.like');
-
-    // Or use this command insted of the list above
-    // Route::resource('posts', PostController::class);
-
-        // Create only chosen routes
-        // Route::resource('posts', PostController::class)->only(['index', 'show,]); 
 });

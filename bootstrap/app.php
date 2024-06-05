@@ -1,9 +1,6 @@
 <?php
 
 use App\Http\Middleware\ActiveMiddleware;
-use App\Http\Middleware\AdminMiddleware;
-use App\Http\Middleware\LogMiddleware;
-use App\Http\Middleware\TokenMiddleware;
 use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Configuration\Exceptions;
 use Illuminate\Foundation\Configuration\Middleware;
@@ -24,13 +21,8 @@ return Application::configure(basePath: dirname(__DIR__))
         },
     )
     ->withMiddleware(function (Middleware $middleware) {
-        $middleware->appendToGroup('test', [
-            LogMiddleware::class,
-        ]);
         $middleware->alias([
             'active' => ActiveMiddleware::class,
-            'admin' => AdminMiddleware::class,
-            'token' => TokenMiddleware::class,
         ]);
     })
     ->withExceptions(function (Exceptions $exceptions) {
