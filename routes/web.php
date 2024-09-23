@@ -21,7 +21,7 @@ Route::get('/login', [LoginController::class, 'index'])->name('login')->middlewa
 Route::post('/login', [LoginController::class, 'store'])->name('login.store');
 
 // Routes for blog
-Route::get('blog', [BlogController::class, 'index'])->name('blog.index')->middleware('test');
+Route::get('blog', [BlogController::class, 'index'])->name('blog.index');
 Route::get('blog/{post}', [BlogController::class, 'show'])->name('blog.show');
 
 
