@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\User;
+use Illuminate\Support\Facades\Auth;
 
 class RegisterController extends Controller
 {
@@ -21,12 +22,17 @@ class RegisterController extends Controller
             'agreement' => ['accepted'],
         ]);
 
-        $user = User::query()->create([
+        // Register
+        $user = User::create([
             'name' => $validated['name'],
             'email' => $validated['email'],
             'password' => $validated['password'],
         ]);
+
+        // Log in
+        Auth::login($user);
         
-        return redirect()->route('user');
+        // Redirect
+        return redirect()->route('home');
     }
 }
