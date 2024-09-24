@@ -21,12 +21,20 @@
 
           @auth
           <li class="nav-item">
-            <span class="nav-link">{{ __('Вы авторизованы')}}</span>
+            <span class="nav-link">{{ auth()->user()->name }}: </span>
           </li>
+          <li class="nav-item">
+            <a href="{{ route('user') }}" class="nav-link {{ active_link('user')}}" aria-current="page" >{{ __('Мои посты')}}</a>
+          </li>
+          <li class="nav-item">
+            <form action=" {{ route('logout') }}" method="post">
+              @csrf
+              <button class="nav-link">Выйти</button>
+          </li>
+
           @endauth
 
           @guest
-            <span class="nav-link">{{ __('Вы не авторизованы')}}</span>
             <li class="nav-item">
               <a href="{{ route('register') }}" class="nav-link {{ active_link('register')}}" aria-current="page" >{{ __('Регистрация')}}</a>
             </li>
@@ -34,7 +42,7 @@
               <a href="{{ route('login') }}" class="nav-link {{ active_link('login')}}" aria-current="page" >{{ __('Вход')}}</a>
             </li>
           @endguest
-          
+
           </ul>
       </div>
     </div>
