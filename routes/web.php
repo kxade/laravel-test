@@ -12,13 +12,17 @@ Route::view('/', 'home.index')->name('home');
 
 Route::redirect('/home', '/', 302)->name('home.redirect');
 
-Route::get('/register', [RegisterController::class, 'index'])->name('register');
+Route::middleware('guest')->group(function () {
+    Route::get('/register', [RegisterController::class, 'index'])->name('register');
+    
+    Route::post('/register', [RegisterController::class, 'store'])->name('register.store');
+    
+    Route::get('/login', [LoginController::class, 'index'])->name('login');
+    
+    Route::post('/login', [LoginController::class, 'store'])->name('login.store');    
+});
 
-Route::post('/register', [RegisterController::class, 'store'])->name('register.store');
-
-Route::get('/login', [LoginController::class, 'index'])->name('login')->middleware('guest');
-
-Route::post('/login', [LoginController::class, 'store'])->name('login.store');
+Route::post('/logout', [LoginController::class, 'logout'])->name('logout');
 
 // Routes for blog
 Route::get('blog', [BlogController::class, 'index'])->name('blog.index');

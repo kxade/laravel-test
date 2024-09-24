@@ -4,6 +4,8 @@
 
 @section('main.content')
 
+    <h1> Hello, {{ auth()->user()->name }} </h1>
+
     <x-title>
         {{ __('Мои посты') }}
         <x-slot name="right">
