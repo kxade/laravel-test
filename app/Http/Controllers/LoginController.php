@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class LoginController extends Controller
 {
@@ -13,12 +14,19 @@ class LoginController extends Controller
 
     public function store(Request $request) 
     {
-        $session = app()->make('session');
+        $validated = $request->validate([
+            'email' => ['required', 'string', 'max:50', 'email'],
+            'password' => ['required', 'string'],
+        ]);
 
-        if (true) {
-            return redirect()->back()->withInput();
+        // Try to log in
+
+        // $session = app()->make('session');
+
+        if (Auth::attempt($validated, $request->remember)) {
+            return redirect()->intended();
+        } else {
+            return back()->withErrors(['failed' => 'Не получилось найти пользователя с таким логином и паролем.']);
         }
-        
-        return redirect()->route('user');
     }
 }

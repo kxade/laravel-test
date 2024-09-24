@@ -33,6 +33,8 @@
                     {{ __('Запомнить меня') }}
                 </x-checkbox> 
             </x-form-item>
+            
+            <x-error name="failed"/>
 
             <x-button type="submit" color="success">
                 {{ __('Войти') }}
