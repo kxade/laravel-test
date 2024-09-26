@@ -30,6 +30,7 @@
             <form action=" {{ route('logout') }}" method="post">
               @csrf
               <button class="nav-link">Выйти</button>
+            </form>
           </li>
 
           @endauth
@@ -43,7 +44,7 @@
             </li>
           @endguest
 
-          </ul>
+        </ul>
       </div>
     </div>
   </nav>
