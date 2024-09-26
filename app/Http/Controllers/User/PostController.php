@@ -13,7 +13,8 @@ class PostController extends Controller
 {
     public function index() 
     {
-        $posts = Post::query()->paginate(12);
+
+        $posts = Auth::user()->posts()->latest()->paginate(6);
 
         return view('user.posts.index', compact('posts'));
     }
