@@ -20,6 +20,11 @@
         </x-slot>
     </x-title>
     
+    @if (session('success'))
+        <div class="alert alert-success">
+            {{ session('success') }}
+        </div>
+    @endif
     <div class="mb-5">
         <h2 class="h4">
             {{ $post->title }}

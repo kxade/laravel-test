@@ -3,12 +3,11 @@
 namespace App\Http\Controllers\User;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\Post\StorePostRequest;
 use App\Models\Post;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
-
+use Illuminate\Support\Facades\Auth;
 
 class PostController extends Controller
 {
@@ -24,30 +23,31 @@ class PostController extends Controller
         return view('user.posts.create');
     }
 
-    public function store(StorePostRequest $request) 
+    public function store(Request $request) 
     {
-        $validated = $request->validate([
+
+        $fields = $request->validate([
             'title' => ['required', 'string', 'max:100'],
             'content' => ['required', 'string', 'max:1000'],
             'published_at' => ['nullable', 'string', 'date'],
             'published' => ['nullable', 'boolean'],
-        ]);
-        
-        $post = Post::query()->create([
-            'user_id' => User::query()->value('id'),
-            'category_id' => 1,
-            'title' => $validated['title'],
-            'content' => $validated['content'],
-            'published_at' => new Carbon($validated['published_at'] ?? null),
-            'published' => $validated['published'] ?? false,
+            'category_id' => ['nullable', 'exists:categories,id'],
         ]);
 
-        return redirect()->route('user.posts.show', 1);
+        if (empty($fields['published_at'])) {
+            $fields['published_at'] = now();
+        }
+        
+        $post = Auth::user()->posts()->create($fields);
+
+        session()->flash('success', 'Post created successfully!');
+
+        return redirect()->route('user.posts.show', $post);
     }
 
-    public function show($post_id) 
+    public function show($post) 
     {
-        $post = Post::query()->findOrFail($post_id);
+        $post = Post::query()->findOrFail($post);
 
         return view('user.posts.show', compact('post'));
     }
