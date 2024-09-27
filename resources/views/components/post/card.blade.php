@@ -8,7 +8,7 @@
         {{ $post->id}}
         <div class="small text-muted">
             <span>{{ $post->published_at->format('d.m.Y h:i:s') }} by</span>
-            <a href="">{{ $post->user->name }}</a>
+            <a href="{{ route('posts.username', $post->user) }}">{{ $post->user->name }}</a>
         </div>
     </x-card-body>
 </x-card>

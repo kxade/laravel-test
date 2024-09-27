@@ -76,4 +76,13 @@ class PostController extends Controller
     {
         return redirect()->route('user.posts');
     }
+
+    public function usernamePosts(User $username)
+    {
+        $userPosts = $username->posts()->latest()->paginate(6);
+        return view('user.posts.username', [
+            'posts' => $userPosts,
+            'user' => $username
+        ]);
+    }
 }

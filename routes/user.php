@@ -20,5 +20,7 @@ Route::prefix('user')->middleware('auth')->group(function () {
     Route::put('posts/{post}/update', [PostController::class, 'update'])->name('user.posts.update');
 
     Route::delete('posts/{post}/delete', [PostController::class, 'destroy'])->name('user.posts.destroy');
-
+    
 });
+
+Route::get('user/{username}/posts/', [PostController::class, 'usernamePosts'])->name('posts.username');
