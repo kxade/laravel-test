@@ -27,7 +27,8 @@
                 </h2>
 
                 <div class="small text-muted">
-                    {{ $post->published_at->format('d.m.Y h:m:s') }}
+                    <span>{{ $post->published_at->format('d.m.Y h:i:s') }} by</span>
+                    <a href="">{{ $post->user->name }}</a>
                 </div>
             </div>
 

@@ -10,7 +10,7 @@ class BlogPostsFilter implements PostsFilter
 {
     public function getPosts(array $validated): \Illuminate\Contracts\Pagination\LengthAwarePaginator
     {
-        $query = Post::query();
+        $query = Post::with('user');
 
         if ($fromDate = $validated['from_date'] ?? null) {
             $query->where('published_at', '>=', new Carbon($fromDate));
@@ -32,6 +32,7 @@ class BlogPostsFilter implements PostsFilter
         return $query->where('published', true)
             ->whereNotNull('published_at')
             ->orderBy('id', 'asc')
-            ->paginate(12, ['id', 'title', 'published_at']);
+            ->paginate(12, ['id', 'title', 'published_at', 'user_id']);
+
     }
 }
