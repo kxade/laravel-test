@@ -72,9 +72,11 @@ class PostController extends Controller
         return redirect()->back();
     }
 
-    public function destroy($post) 
+    public function destroy(Post $post) 
     {
-        return redirect()->route('user.posts');
+        $post->delete();
+        
+        return back()->with('delete', 'Ваш пост был удален');
     }
 
     public function usernamePosts(User $username)

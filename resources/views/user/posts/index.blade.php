@@ -14,6 +14,13 @@
             </x-button-link>
         </x-slot>
     </x-title>
+
+    {{-- Session Messages --}}
+    @if (session('delete'))
+        <div class="alert alert-success">
+            {{ session('delete') }}
+        </div>
+    @endif
     
     @if(empty($posts))
         {{ __('Нет ни одного поста') }}
@@ -29,7 +36,14 @@
                 <div class="small text-muted">
                     <span>{{ $post->published_at->format('d.m.Y h:i:s') }} by</span>
                     <a href="">{{ $post->user->name }}</a>
+                    {{-- Delete the post --}}
+                    <form action="{{ route('user.posts.destroy', $post)}}" method="POST">
+                        @csrf
+                        @method('DELETE')
+                        <button>Удалить</button>
+                    </form>
                 </div>
+
             </div>
 
         @endforeach
