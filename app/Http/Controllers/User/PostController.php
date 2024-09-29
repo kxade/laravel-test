@@ -53,23 +53,32 @@ class PostController extends Controller
         return view('user.posts.show', compact('post'));
     }
 
-    public function edit($post_id) 
+    public function edit(Post $post) 
     {
-        $post = Post::query()->findOrFail($post_id);
+        // $post = Post::query()->findOrFail($post);
         
         return view('user.posts.edit', compact('post'));
     }
 
-    public function update(Request $request, $post) 
+    public function update(Request $request, Post $post) 
     {
-        $validated = $request->validate([
+        $fields = $request->validate([
             'title' => ['required', 'string', 'max:100'],
             'content' => ['required', 'string', 'max:1000'],
             'published_at' => ['nullable', 'string', 'date'],
             'published' => ['nullable', 'boolean'],
+            'category_id' => ['nullable', 'exists:categories,id'],
         ]);
 
-        return redirect()->back();
+        if (empty($fields['published_at'])) {
+            $fields['published_at'] = now();
+        }
+
+        $post->update($fields);
+
+        session()->flash('success', 'Post was changed successfully!');
+
+        return redirect()->route('user.posts.show', $post);
     }
 
     public function destroy(Post $post) 

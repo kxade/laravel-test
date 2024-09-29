@@ -7,13 +7,13 @@
     <x-title>
         {{ __('Изменить пост') }}
         <x-slot name="link">
-            <a href="{{ route('user.posts.show', $post->id) }}">
+            <a href="{{ route('user.posts.show', $post) }}">
                 {{ __("Назад") }}
             </a>
         </x-slot>
     </x-title>
     
-    <x-post.form action="{{ route('user.posts.update', $post->id) }}" method="put" :post="$post">
+    <x-post.form action="{{ route('user.posts.update', $post) }}" method="put" :post="$post">
         <x-button type="submit">
             {{ __('Изменить пост') }}
         </x-button>

@@ -14,7 +14,7 @@
         </x-slot>
 
         <x-slot name="right">
-            <x-button-link href="{{ route('user.posts.edit', $post->id) }}">
+            <x-button-link href="{{ route('user.posts.edit', $post) }}">
                 {{ __('Изменить') }}
             </x-button-link>
         </x-slot>
