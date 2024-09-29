@@ -8,6 +8,7 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Gate;
 
 class PostController extends Controller
 {
@@ -56,12 +57,18 @@ class PostController extends Controller
     public function edit(Post $post) 
     {
         // $post = Post::query()->findOrFail($post);
+
+        // Authorizing the action
+        Gate::authorize('modify', $post);
         
         return view('user.posts.edit', compact('post'));
     }
 
     public function update(Request $request, Post $post) 
     {
+        // Authorizing the action
+        Gate::authorize('modify', $post);
+
         $fields = $request->validate([
             'title' => ['required', 'string', 'max:100'],
             'content' => ['required', 'string', 'max:1000'],
@@ -83,6 +90,9 @@ class PostController extends Controller
 
     public function destroy(Post $post) 
     {
+        // Authorizing the action
+        Gate::authorize('modify', $post);
+        
         $post->delete();
         
         return back()->with('delete', 'Ваш пост был удален');
