@@ -7,22 +7,24 @@ use App\Http\Requests\Post\StorePostRequest;
 use App\Http\Resources\PostResource;
 use App\Models\Post;
 use App\Enums\PostSource;
+use App\Services\Posts\PostService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
 class PostController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
+    protected $postService;
+
+    public function __construct(PostService $postService)
+    {
+        $this->postService = $postService;
+    }
+
     public function index()
     {
         return PostResource::collection(Post::all()); 
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
     public function store(Request $request)
     {
         $fields = $request->validate([
@@ -33,31 +35,22 @@ class PostController extends Controller
             'category_id' => ['nullable', 'exists:categories,id'],
         ]);
 
-        if (empty($fields['published_at'])) {
-            $fields['published_at'] = now();
+        try {
+            $post = $this->postService->store($fields, PostSource::Api);
+            return response()->json([
+                'message' => 'Post created successfully!',
+                'post' => $post
+            ], 201);
+        } catch (\Exception $e) {
+            return response()->json(['message' => $e->getMessage()], 401);
         }
-
-        $fields['source'] = PostSource::Api;
-
-        $post = Auth::user()->posts()->create($fields);
-
-        return response()->json([
-            'message' => 'Post created successfully!',
-            'post' => $post
-        ], 201);
     }
 
-    /**
-     * Display the specified resource.
-     */
     public function show(string $post)
     {
         return new PostResource(Post::findOrFail($post));
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
     public function update(StorePostRequest $request, Post $post)
     {
         $post->update($request->validated());
@@ -65,9 +58,6 @@ class PostController extends Controller
         return new PostResource($post);
     }
 
-    /**
-     * Remove the specified resource from storage.
-     */
     public function destroy(string $post)
     {
         Post::findOrFail($post)->delete();

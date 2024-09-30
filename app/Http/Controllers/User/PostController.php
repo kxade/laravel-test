@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Post;
 use App\Models\User;
 use App\Enums\PostSource;
+use App\Services\Posts\PostService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Auth;
@@ -13,6 +14,13 @@ use Illuminate\Support\Facades\Gate;
 
 class PostController extends Controller
 {
+    protected $postService;
+
+    public function __construct(PostService $postService)
+    {
+        $this->postService = $postService;
+    }
+
     public function index() 
     {
 
@@ -26,28 +34,23 @@ class PostController extends Controller
         return view('user.posts.create');
     }
 
-    public function store(Request $request) 
+    public function store(Request $request)
     {
-
         $fields = $request->validate([
             'title' => ['required', 'string', 'max:100'],
             'content' => ['required', 'string', 'max:1000'],
-            'published_at' => ['nullable', 'string', 'date'],
+            'published_at' => ['nullable', 'date'],
             'published' => ['nullable', 'boolean'],
             'category_id' => ['nullable', 'exists:categories,id'],
         ]);
 
-        if (empty($fields['published_at'])) {
-            $fields['published_at'] = now();
+        try {
+            $post = $this->postService->store($fields, PostSource::App);
+            session()->flash('success', 'Post created successfully!');
+            return redirect()->route('user.posts.show', $post);
+        } catch (\Exception $e) {
+            return redirect()->back()->withErrors(['error' => $e->getMessage()]);
         }
-
-        $fields['source'] = PostSource::App;
-        
-        $post = Auth::user()->posts()->create($fields);
-
-        session()->flash('success', 'Post created successfully!');
-
-        return redirect()->route('user.posts.show', $post);
     }
 
     public function show($post) 
