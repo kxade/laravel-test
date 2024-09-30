@@ -5,6 +5,7 @@ namespace App\Http\Controllers\User;
 use App\Http\Controllers\Controller;
 use App\Models\Post;
 use App\Models\User;
+use App\Enums\PostSource;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Auth;
@@ -39,6 +40,8 @@ class PostController extends Controller
         if (empty($fields['published_at'])) {
             $fields['published_at'] = now();
         }
+
+        $fields['source'] = PostSource::App;
         
         $post = Auth::user()->posts()->create($fields);
 
@@ -92,7 +95,7 @@ class PostController extends Controller
     {
         // Authorizing the action
         Gate::authorize('modify', $post);
-        
+
         $post->delete();
         
         return back()->with('delete', 'Ваш пост был удален');

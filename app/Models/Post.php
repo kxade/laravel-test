@@ -5,6 +5,8 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use App\Enums\PostSource;
+
 
 class Post extends Model
 {
@@ -21,6 +23,7 @@ class Post extends Model
     protected $casts = [
         'published' => 'boolean',
         'published_at' => 'datetime',
+        'source' => PostSource::class,
     ];
 
 
