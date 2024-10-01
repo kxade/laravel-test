@@ -8,7 +8,7 @@ use App\Http\Resources\PostResource;
 use App\Models\Post;
 use App\Enums\PostSource;
 use App\Services\Posts\PostService;
-use Illuminate\Http\Request;
+use App\Http\Requests\Api\PostStoreRequest;
 use Illuminate\Support\Facades\Auth;
 
 class PostController extends Controller
@@ -25,18 +25,12 @@ class PostController extends Controller
         return PostResource::collection(Post::all()); 
     }
 
-    public function store(Request $request)
+    public function store(PostStoreRequest $request)
     {
-        $fields = $request->validate([
-            'title' => ['required', 'string', 'max:100'],
-            'content' => ['required', 'string', 'max:1000'],
-            'published_at' => ['nullable', 'date'],
-            'published' => ['nullable', 'boolean'],
-            'category_id' => ['nullable', 'exists:categories,id'],
-        ]);
+        $data = $request->validate();
 
         try {
-            $post = $this->postService->store($fields, PostSource::Api);
+            $post = $this->postService->store($data, PostSource::Api);
             return response()->json([
                 'message' => 'Post created successfully!',
                 'post' => $post

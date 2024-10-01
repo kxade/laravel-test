@@ -8,7 +8,7 @@ use App\Models\User;
 use App\Enums\PostSource;
 use App\Services\Posts\PostService;
 use Illuminate\Http\Request;
-use Illuminate\Support\Carbon;
+use App\Http\Requests\App\PostStoreRequest;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Gate;
 
@@ -34,18 +34,12 @@ class PostController extends Controller
         return view('user.posts.create');
     }
 
-    public function store(Request $request)
+    public function store(PostStoreRequest $request)
     {
-        $fields = $request->validate([
-            'title' => ['required', 'string', 'max:100'],
-            'content' => ['required', 'string', 'max:1000'],
-            'published_at' => ['nullable', 'date'],
-            'published' => ['nullable', 'boolean'],
-            'category_id' => ['nullable', 'exists:categories,id'],
-        ]);
+        $data = $request->validate();
 
         try {
-            $post = $this->postService->store($fields, PostSource::App);
+            $post = $this->postService->store($data, PostSource::App);
             session()->flash('success', 'Post created successfully!');
             return redirect()->route('user.posts.show', $post);
         } catch (\Exception $e) {
