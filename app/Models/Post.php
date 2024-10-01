@@ -18,6 +18,7 @@ class Post extends Model
         'content',
         'published',
         'published_at',
+        'source',
     ];
 
     protected $casts = [
