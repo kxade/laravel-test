@@ -5,10 +5,8 @@ namespace App\Http\Controllers\API\V1;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\PostResource;
 use App\Models\Post;
-use App\Enums\PostSource;
 use App\Services\Posts\PostService;
-use App\Http\Requests\Api\PostStoreRequest;
-use App\Http\Requests\Api\PostUpdateRequest;
+use App\Http\Requests\Api\PostRequest;
 use App\DataTransferObjects\PostDTO;
 use Illuminate\Support\Facades\Gate;
 
@@ -26,18 +24,11 @@ class PostController extends Controller
         return PostResource::collection(Post::all()); 
     }
 
-    public function store(PostStoreRequest $request)
+    public function store(PostRequest $request)
     {
         try {
             $post = $this->postService->store(
-                new PostDTO(
-                    title: $request->validated('title'),
-                    content: $request->validated('content'),
-                    published_at: $request->validated('published_at'),
-                    published: $request->validated('published'),
-                    category_id: $request->validated('category_id'),
-                    source: PostSource::Api,
-                )
+                PostDTO::fromApiRequest($request)
             );
             
             return response()->json([
@@ -54,7 +45,7 @@ class PostController extends Controller
         return new PostResource(Post::findOrFail($post));
     }
 
-    public function update(PostUpdateRequest $request, Post $post)
+    public function update(PostRequest $request, Post $post)
     {
         // Authorizing the action
         if (Auth::user()->cannot('modify', $post)) {
@@ -63,14 +54,7 @@ class PostController extends Controller
 
         try {
             $updatedPost = $this->postService->update(
-                new PostDTO(
-                    title: $request->validated('title'),
-                    content: $request->validated('content'),
-                    published_at: $request->validated('published_at'),
-                    published: $request->validated('published'),
-                    category_id: $request->validated('category_id'),
-                    source: PostSource::Api,
-                ),
+                PostDTO::fromApiRequest($request),
                 $post,
             );
             

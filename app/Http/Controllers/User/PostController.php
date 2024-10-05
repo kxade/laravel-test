@@ -5,10 +5,8 @@ namespace App\Http\Controllers\User;
 use App\Http\Controllers\Controller;
 use App\Models\Post;
 use App\Models\User;
-use App\Enums\PostSource;
 use App\Services\Posts\PostService;
-use App\Http\Requests\App\PostStoreRequest;
-use App\Http\Requests\App\PostUpdateRequest;
+use App\Http\Requests\App\PostRequest;
 use App\DataTransferObjects\PostDTO;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Gate;
@@ -35,18 +33,11 @@ class PostController extends Controller
         return view('user.posts.create');
     }
 
-    public function store(PostStoreRequest $request)
+    public function store(PostRequest $request)
     {
         try {
             $post = $this->postService->store(
-                new PostDTO(
-                    title: $request->validated('title'),
-                    content: $request->validated('content'),
-                    published_at: $request->validated('published_at'),
-                    published: $request->validated('published'),
-                    category_id: $request->validated('category_id'),
-                    source: PostSource::App,
-                )
+                PostDTO::fromAppRequest($request)
             );
             
             session()->flash('success', 'Post created successfully!');        
@@ -72,21 +63,14 @@ class PostController extends Controller
         return view('user.posts.edit', compact('post'));
     }
 
-    public function update(PostUpdateRequest $request, Post $post) 
+    public function update(PostRequest $request, Post $post) 
     {
         // Authorizing the action
         Gate::authorize('modify', $post);
 
         try {
             $updatedPost = $this->postService->update(
-                new PostDTO(
-                    title: $request->validated('title'),
-                    content: $request->validated('content'),
-                    published_at: $request->validated('published_at'),
-                    published: $request->validated('published'),
-                    category_id: $request->validated('category_id'),
-                    source: PostSource::App,
-                ),
+                PostDTO::fromAppRequest($request),
                 $post,
             );
 
