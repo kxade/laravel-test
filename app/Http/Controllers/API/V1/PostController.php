@@ -27,13 +27,13 @@ class PostController extends Controller
 
     public function store(PostStoreRequest $request)
     {
-        $data = $request->validate();
+        $data = $request->validated();
 
         try {
             $post = $this->postService->store($data, PostSource::Api);
             return response()->json([
                 'message' => 'Post created successfully!',
-                'post' => $post
+                'post' => PostResource::make($post)
             ], 201);
         } catch (\Exception $e) {
             return response()->json(['message' => $e->getMessage()], 401);

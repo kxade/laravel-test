@@ -36,7 +36,7 @@ class PostController extends Controller
 
     public function store(PostStoreRequest $request)
     {
-        $data = $request->validate();
+        $data = $request->validated();
 
         try {
             $post = $this->postService->store($data, PostSource::App);
