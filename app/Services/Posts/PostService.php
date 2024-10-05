@@ -9,7 +9,13 @@ use App\DataTransferObjects\PostDto;
 
 class PostService
 {
-    public function store(string $title, string $content, ?string $published_at, bool $published, ?int $category_id, PostSource $source): Post
+    public function store(
+        string $title, 
+        string $content, 
+        ?string $published_at, 
+        bool $published, 
+        ?int $category_id, 
+        PostSource $source): Post
     {
         $user = Auth::user();
         if (!$user) {
