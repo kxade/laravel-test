@@ -7,9 +7,9 @@ use App\Models\Post;
 use App\Models\User;
 use App\Enums\PostSource;
 use App\Services\Posts\PostService;
-use Illuminate\Http\Request;
 use App\Http\Requests\App\PostStoreRequest;
 use App\Http\Requests\App\PostUpdateRequest;
+use App\DataTransferObjects\PostDTO;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Gate;
 
@@ -39,12 +39,14 @@ class PostController extends Controller
     {
         try {
             $post = $this->postService->store(
-                $request->validated('title'),
-                $request->validated('content'),
-                $request->validated('published_at'),
-                $request->validated('published'),
-                $request->validated('category_id'),
-                PostSource::App,
+                new PostDTO(
+                    title: $request->validated('title'),
+                    content: $request->validated('content'),
+                    published_at: $request->validated('published_at'),
+                    published: $request->validated('published'),
+                    category_id: $request->validated('category_id'),
+                    source: PostSource::App,
+                )
             );
             
             session()->flash('success', 'Post created successfully!');        
@@ -76,17 +78,20 @@ class PostController extends Controller
         Gate::authorize('modify', $post);
 
         try {
-            $post = $this->postService->update(
-                $request->validated('title'),
-                $request->validated('content'),
-                $request->validated('published_at'),
-                $request->validated('published'),
-                $request->validated('category_id'),
-                PostSource::App,
+            $updatedPost = $this->postService->update(
+                new PostDTO(
+                    title: $request->validated('title'),
+                    content: $request->validated('content'),
+                    published_at: $request->validated('published_at'),
+                    published: $request->validated('published'),
+                    category_id: $request->validated('category_id'),
+                    source: PostSource::App,
+                ),
                 $post,
             );
+
             session()->flash('success', 'Post was changed successfully!');
-            return redirect()->route('user.posts.show', $post);
+            return redirect()->route('user.posts.show', $updatedPost);
         } catch (\Exception $e) {
             return redirect()->back()->withErrors(['error' => $e->getMessage()]);
         }

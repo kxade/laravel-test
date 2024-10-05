@@ -3,14 +3,13 @@
 namespace App\Http\Controllers\API\V1;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\Post\StorePostRequest;
 use App\Http\Resources\PostResource;
 use App\Models\Post;
 use App\Enums\PostSource;
 use App\Services\Posts\PostService;
 use App\Http\Requests\Api\PostStoreRequest;
-use App\Http\Requests\App\PostUpdateRequest;
-use Illuminate\Support\Facades\Auth;
+use App\Http\Requests\Api\PostUpdateRequest;
+use App\DataTransferObjects\PostDTO;
 use Illuminate\Support\Facades\Gate;
 
 class PostController extends Controller
@@ -31,12 +30,14 @@ class PostController extends Controller
     {
         try {
             $post = $this->postService->store(
-                $request->validated('title'),
-                $request->validated('content'),
-                $request->validated('published_at'),
-                $request->validated('published'),
-                $request->validated('category_id'),
-                PostSource::Api,
+                new PostDTO(
+                    title: $request->validated('title'),
+                    content: $request->validated('content'),
+                    published_at: $request->validated('published_at'),
+                    published: $request->validated('published'),
+                    category_id: $request->validated('category_id'),
+                    source: PostSource::Api,
+                )
             );
             
             return response()->json([
@@ -61,13 +62,15 @@ class PostController extends Controller
         }
 
         try {
-            $updatedPost = $this->postService->store(
-                $request->validated('title'),
-                $request->validated('content'),
-                $request->validated('published_at'),
-                $request->validated('published'),
-                $request->validated('category_id'),
-                PostSource::Api,
+            $updatedPost = $this->postService->update(
+                new PostDTO(
+                    title: $request->validated('title'),
+                    content: $request->validated('content'),
+                    published_at: $request->validated('published_at'),
+                    published: $request->validated('published'),
+                    category_id: $request->validated('category_id'),
+                    source: PostSource::Api,
+                ),
                 $post,
             );
             

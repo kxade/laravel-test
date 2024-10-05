@@ -3,19 +3,12 @@
 namespace App\Services\Posts;
 
 use App\Models\Post;
-use App\Enums\PostSource;
 use Illuminate\Support\Facades\Auth;
-use App\DataTransferObjects\PostDto;
+use App\DataTransferObjects\PostDTO;
 
 class PostService
 {
-    public function store(
-        string $title, 
-        string $content, 
-        ?string $published_at, 
-        bool $published, 
-        ?int $category_id, 
-        PostSource $source): Post
+    public function store(PostDTO $dto): Post
     {
         $user = Auth::user();
         if (!$user) {
@@ -23,18 +16,18 @@ class PostService
         }
 
         $data = [
-            'title' => $title,
-            'content' => $content,
-            'published_at' => $published_at ?? now(),
-            'published' => $published,
-            'category_id' => $category_id,
-            'source' => $source,
+            'title' => $dto->title,
+            'content' => $dto->content,
+            'published_at' => $dto->published_at ?? now(),
+            'published' => $dto->published ?? false,
+            'category_id' => $dto->category_id,
+            'source' => $dto->source,
         ];
 
         return $user->posts()->create($data);
     }
 
-    public function update(string $title, string $content, ?string $published_at, bool $published, ?int $category_id, PostSource $source, Post $post): Post
+    public function update(PostDto $dto, Post $post): Post
     {
         $user = Auth::user();
         if (!$user) {
@@ -42,12 +35,12 @@ class PostService
         }
 
         $data = [
-            'title' => $title,
-            'content' => $content,
-            'published_at' => $published_at ?? now(),
-            'published' => $published ?? false,
-            'category_id' => $category_id,
-            'source' => $source,
+            'title' => $dto->title,
+            'content' => $dto->content,
+            'published_at' => $dto->published_at ?? now(),
+            'published' => $dto->published ?? false,
+            'category_id' => $dto->category_id,
+            'source' => $dto->source,
         ];
 
         $post->update($data);
