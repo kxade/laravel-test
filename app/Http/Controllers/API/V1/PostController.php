@@ -10,6 +10,7 @@ use App\Enums\PostSource;
 use App\Services\Posts\PostService;
 use App\Http\Requests\Api\PostStoreRequest;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Gate;
 
 class PostController extends Controller
 {
@@ -45,15 +46,30 @@ class PostController extends Controller
         return new PostResource(Post::findOrFail($post));
     }
 
-    public function update(StorePostRequest $request, Post $post)
+    public function update(PostStoreRequest $request, Post $post)
     {
-        $post->update($request->validated());
+        $data = $request->validated();
 
-        return new PostResource($post);
+        // Authorizing the action
+        if (Auth::user()->cannot('modify', $post)) {
+            return response()->json(['message' => 'Unauthorized'], 403);
+        }
+
+        try {
+            $updatedPost = $this->postService->update($data, $post);
+            return response()->json([
+                'message' => 'Post updated successfully!',
+                'post' => PostResource::make($updatedPost)
+            ], 200);
+        } catch (\Exception $e) {
+            return response()->json(['message' => 'An unexpected error occurred.'], 500);
+        }
     }
 
     public function destroy(string $post)
     {
+        Gate::authorize('modify', $post);
+
         Post::findOrFail($post)->delete();
     }
 }

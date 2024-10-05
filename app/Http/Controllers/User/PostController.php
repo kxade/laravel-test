@@ -40,14 +40,15 @@ class PostController extends Controller
 
         try {
             $post = $this->postService->store($data, PostSource::App);
-            session()->flash('success', 'Post created successfully!');
+            session()->flash('success', 'Post created successfully!');        
             return redirect()->route('user.posts.show', $post);
+        
         } catch (\Exception $e) {
             return redirect()->back()->withErrors(['error' => $e->getMessage()]);
         }
     }
 
-    public function show($post) 
+    public function show(string $post) 
     {
         $post = Post::query()->findOrFail($post);
 
@@ -56,43 +57,33 @@ class PostController extends Controller
 
     public function edit(Post $post) 
     {
-        // $post = Post::query()->findOrFail($post);
-
         // Authorizing the action
         Gate::authorize('modify', $post);
         
         return view('user.posts.edit', compact('post'));
     }
 
-    public function update(Request $request, Post $post) 
+    public function update(PostStoreRequest $request, Post $post) 
     {
         // Authorizing the action
         Gate::authorize('modify', $post);
 
-        $fields = $request->validate([
-            'title' => ['required', 'string', 'max:100'],
-            'content' => ['required', 'string', 'max:1000'],
-            'published_at' => ['nullable', 'string', 'date'],
-            'published' => ['nullable', 'boolean'],
-            'category_id' => ['nullable', 'exists:categories,id'],
-        ]);
+        $data = $request->validated();
 
-        if (empty($fields['published_at'])) {
-            $fields['published_at'] = now();
+        try {        
+            $this->postService->update($data, $post);
+            session()->flash('success', 'Post was changed successfully!');
+            return redirect()->route('user.posts.show', $post);
+        } catch (\Exception $e) {
+            return redirect()->back()->withErrors(['error' => $e->getMessage()]);
         }
-
-        $post->update($fields);
-
-        session()->flash('success', 'Post was changed successfully!');
-
-        return redirect()->route('user.posts.show', $post);
     }
 
     public function destroy(Post $post) 
     {
         // Authorizing the action
         Gate::authorize('modify', $post);
-
+        
         $post->delete();
         
         return back()->with('delete', 'Ваш пост был удален');

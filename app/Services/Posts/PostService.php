@@ -23,4 +23,20 @@ class PostService
 
         return $user->posts()->create($data);
     }
+
+    public function update(array $data, Post $post): Post
+    {
+        $user = Auth::user();
+        if (!$user) {
+            throw new \Exception('Unauthenticated');
+        }
+
+        if (empty($data['published_at'])) {
+            $data['published_at'] = now();
+        }
+
+        $post->update($data);
+
+        return $post;
+    }
 }
