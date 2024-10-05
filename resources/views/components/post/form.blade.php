@@ -26,6 +26,7 @@
     </x-form-item>
 
     <x-form-item>
+        <x-input type="hidden" name="published" value="0" />
         <x-checkbox name="published">
             {{ __('Опубликовано')}}
         </x-checkbox>

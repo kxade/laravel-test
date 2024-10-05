@@ -9,6 +9,7 @@ use App\Models\Post;
 use App\Enums\PostSource;
 use App\Services\Posts\PostService;
 use App\Http\Requests\Api\PostStoreRequest;
+use App\Http\Requests\App\PostUpdateRequest;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Gate;
 
@@ -28,10 +29,16 @@ class PostController extends Controller
 
     public function store(PostStoreRequest $request)
     {
-        $data = $request->validated();
-
         try {
-            $post = $this->postService->store($data, PostSource::Api);
+            $post = $this->postService->store(
+                $request->validated('title'),
+                $request->validated('content'),
+                $request->validated('published_at'),
+                $request->validated('published'),
+                $request->validated('category_id'),
+                PostSource::Api,
+            );
+            
             return response()->json([
                 'message' => 'Post created successfully!',
                 'post' => PostResource::make($post)
@@ -46,17 +53,24 @@ class PostController extends Controller
         return new PostResource(Post::findOrFail($post));
     }
 
-    public function update(PostStoreRequest $request, Post $post)
+    public function update(PostUpdateRequest $request, Post $post)
     {
-        $data = $request->validated();
-
         // Authorizing the action
         if (Auth::user()->cannot('modify', $post)) {
             return response()->json(['message' => 'Unauthorized'], 403);
         }
 
         try {
-            $updatedPost = $this->postService->update($data, $post);
+            $updatedPost = $this->postService->store(
+                $request->validated('title'),
+                $request->validated('content'),
+                $request->validated('published_at'),
+                $request->validated('published'),
+                $request->validated('category_id'),
+                PostSource::Api,
+                $post,
+            );
+            
             return response()->json([
                 'message' => 'Post updated successfully!',
                 'post' => PostResource::make($updatedPost)

@@ -9,6 +9,7 @@ use App\Enums\PostSource;
 use App\Services\Posts\PostService;
 use Illuminate\Http\Request;
 use App\Http\Requests\App\PostStoreRequest;
+use App\Http\Requests\App\PostUpdateRequest;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Gate;
 
@@ -36,10 +37,16 @@ class PostController extends Controller
 
     public function store(PostStoreRequest $request)
     {
-        $data = $request->validated();
-
         try {
-            $post = $this->postService->store($data, PostSource::App);
+            $post = $this->postService->store(
+                $request->validated('title'),
+                $request->validated('content'),
+                $request->validated('published_at'),
+                $request->validated('published'),
+                $request->validated('category_id'),
+                PostSource::App,
+            );
+            
             session()->flash('success', 'Post created successfully!');        
             return redirect()->route('user.posts.show', $post);
         
@@ -63,15 +70,21 @@ class PostController extends Controller
         return view('user.posts.edit', compact('post'));
     }
 
-    public function update(PostStoreRequest $request, Post $post) 
+    public function update(PostUpdateRequest $request, Post $post) 
     {
         // Authorizing the action
         Gate::authorize('modify', $post);
 
-        $data = $request->validated();
-
-        try {        
-            $this->postService->update($data, $post);
+        try {
+            $post = $this->postService->update(
+                $request->validated('title'),
+                $request->validated('content'),
+                $request->validated('published_at'),
+                $request->validated('published'),
+                $request->validated('category_id'),
+                PostSource::App,
+                $post,
+            );
             session()->flash('success', 'Post was changed successfully!');
             return redirect()->route('user.posts.show', $post);
         } catch (\Exception $e) {
