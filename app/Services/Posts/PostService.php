@@ -9,6 +9,16 @@ use App\DataTransferObjects\PostDTO;
 
 class PostService implements UserPostInterface
 {
+    public function getPosts()
+    {
+        return Auth::user()->posts()->latest()->paginate(6);
+    }
+
+    public function showPost(string $post_id)
+    {
+        return Post::query()->findOrFail($post_id);
+    }
+
     public function store(PostDTO $dto): Post
     {
         $user = Auth::user();

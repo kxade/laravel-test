@@ -22,8 +22,7 @@ class PostController extends Controller
 
     public function index() 
     {
-
-        $posts = Auth::user()->posts()->latest()->paginate(6);
+        $posts = $this->postService->getPosts();
 
         return view('user.posts.index', compact('posts'));
     }
@@ -48,9 +47,9 @@ class PostController extends Controller
         }
     }
 
-    public function show(string $post) 
+    public function show(string $post_id) 
     {
-        $post = Post::query()->findOrFail($post);
+        $post = $this->postService->showPost($post_id);
 
         return view('user.posts.show', compact('post'));
     }
