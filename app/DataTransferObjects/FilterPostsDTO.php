@@ -4,7 +4,7 @@ namespace App\DataTransferObjects;
 
 use App\Http\Requests\App\FilterPostsRequest;
 
-class FilterPostsDTO
+readonly class FilterPostsDTO
 {
     public function __construct(
         public ?string $fromDate,

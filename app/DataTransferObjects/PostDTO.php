@@ -40,7 +40,7 @@ readonly class PostDTO
             published_at: $request->validated('published_at'),
             published: $request->validated('published'),
             category_id: $request->validated('category_id'),
-            source: PostSource::App,
+            source: PostSource::Api,
         );
     }
 }
