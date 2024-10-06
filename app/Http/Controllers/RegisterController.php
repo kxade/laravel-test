@@ -2,35 +2,32 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
+use App\Http\Requests\App\RegisterRequest;
 use App\Models\User;
-use Illuminate\Support\Facades\Auth;
+use App\Services\AuthService;
+use App\DataTransferObjects\RegisterDTO;
+use App\Contracts\User\AuthInterface;
 
 class RegisterController extends Controller
 {
+    protected $authService;
+
+    public function __construct(AuthInterface $authService)
+    {
+        $this->authService = $authService;
+    }
+
     public function index() 
     {
         return view('register.index');
     }
 
-    public function store(Request $request) 
+    public function store(RegisterRequest $request) 
     {    
-        $validated = $request->validate([
-            'name' => ['required', 'string', 'max:50'],
-            'email' => ['required', 'string', 'max:50', 'email', 'unique:users,email'],
-            'password' => ['required', 'string', 'min:7', 'max:50', 'confirmed'],
-            'agreement' => ['accepted'],
-        ]);
-
-        // Register
-        $user = User::create([
-            'name' => $validated['name'],
-            'email' => $validated['email'],
-            'password' => $validated['password'],
-        ]);
-
-        // Log in
-        Auth::login($user);
+        // Register and log in
+        $this->authService->register(
+            RegisterDTO::fromAppRequest($request)
+        );
         
         // Redirect
         return redirect()->route('home');
