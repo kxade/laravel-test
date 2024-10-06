@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Contracts\Posts\BlogPostInterface;
 use App\Http\Requests\App\FilterPostsRequest;
+use App\DataTransferObjects\FilterPostsDTO;
 
 class BlogController extends Controller
 {
@@ -16,7 +17,9 @@ class BlogController extends Controller
 
     public function index(FilterPostsRequest $request)
     {
-        $posts = $this->postService->getPosts($request);
+        $posts = $this->postService->getPosts(
+            FilterPostsDTO::fromAppRequest($request)
+        );
 
         return view('blog.index', compact('posts'));
     }

@@ -5,29 +5,29 @@ namespace App\Services\Posts;
 use App\Contracts\Posts\BlogPostInterface;
 use App\Models\Post;
 use App\Http\Requests\App\FilterPostsRequest;
+use App\DataTransferObjects\FilterPostsDTO;
 use Carbon\Carbon;
 
 class BlogPostService implements BlogPostInterface
 {
-    public function getPosts(FilterPostsRequest $request): \Illuminate\Contracts\Pagination\LengthAwarePaginator
+    public function getPosts(FilterPostsDTO $dto): \Illuminate\Contracts\Pagination\LengthAwarePaginator
     {
         $query = Post::with('user');
-        $validated = $request->validated();
 
-        if ($fromDate = $validated['from_date'] ?? null) {
+        if ($fromDate = $dto->fromDate ?? null) {
             $query->where('published_at', '>=', new Carbon($fromDate));
         }
 
-        if ($toDate = $validated['to_date'] ?? null) {
+        if ($toDate = $dto->to_date ?? null) {
             $query->where('published_at', '<=', new Carbon($toDate));
         }
 
-        if ($search = $validated['search'] ?? null) {
+        if ($search = $dto->search ?? null) {
             $query->where('title', 'ilike', "%{$search}%")
                 ->orWhere('content', 'ilike', "%{$search}%");
         }
 
-        if ($tag = $validated['tag'] ?? null) {
+        if ($tag = $dto->tag ?? null) {
             $query->whereJsonContains('tags', $tag);
         }
 
