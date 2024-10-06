@@ -3,27 +3,28 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
+use App\Http\Requests\App\LoginRequest;
+use App\Contracts\User\AuthInterface;
 
 class LoginController extends Controller
 {
+    protected $authService;
+
+    public function __construct(AuthInterface $authService)
+    {
+        $this->authService = $authService;
+    }
+    
     public function index() 
     {
         return view('login.index');
     }
 
-    public function store(Request $request) 
+    public function store(LoginRequest $request) 
     {
-        $validated = $request->validate([
-            'email' => ['required', 'string', 'max:50', 'email'],
-            'password' => ['required', 'string'],
-        ]);
+        $auth = $this->authService->login($request);
 
-        // Try to log in
-
-        // $session = app()->make('session');
-
-        if (Auth::attempt($validated, $request->remember)) {
+        if ($auth) {
             return redirect()->intended('user');
         } else {
             return back()->withErrors(['failed' => 'Не получилось найти пользователя с таким логином и паролем.']);
@@ -32,10 +33,7 @@ class LoginController extends Controller
 
     public function logout(Request $request) 
     {
-        Auth::logout();
-
-        $request->session()->invalidate();
-        $request->session()->regenerateToken();
+        $this->authService->logout($request);
 
         return redirect('/');
     }

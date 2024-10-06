@@ -4,7 +4,7 @@ namespace App\DataTransferObjects;
 
 use App\Http\Requests\App\RegisterRequest;
 
-readonly class RegisterDTO
+readonly class AuthDTO
 {
     public function __construct(
         public string $name,
@@ -15,7 +15,7 @@ readonly class RegisterDTO
     {
     }
 
-    public static function fromAppRequest(RegisterRequest $request): RegisterDTO
+    public static function fromAppRegisterRequest(RegisterRequest $request): AuthDTO
     {
         return new self(
             name: $request->validated('name'),

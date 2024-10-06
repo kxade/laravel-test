@@ -2,9 +2,15 @@
 
 namespace App\Contracts\User;
 
-use App\DataTransferObjects\RegisterDTO;
+use App\DataTransferObjects\AuthDTO;
+use App\Http\Requests\App\LoginRequest;
+use Illuminate\Http\Request;
 
 interface AuthInterface
 {
-    public function register(RegisterDTO $dto);
+    public function register(AuthDTO $dto);
+
+    public function login(LoginRequest $request);
+
+    public function logout(Request $request);
 }

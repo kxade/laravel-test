@@ -3,9 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\App\RegisterRequest;
-use App\Models\User;
-use App\Services\AuthService;
-use App\DataTransferObjects\RegisterDTO;
+use App\DataTransferObjects\AuthDTO;
 use App\Contracts\User\AuthInterface;
 
 class RegisterController extends Controller
@@ -26,7 +24,7 @@ class RegisterController extends Controller
     {    
         // Register and log in
         $this->authService->register(
-            RegisterDTO::fromAppRequest($request)
+            AuthDTO::fromAppRegisterRequest($request)
         );
         
         // Redirect
