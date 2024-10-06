@@ -2,11 +2,12 @@
 
 namespace App\Services\Posts;
 
+use App\Contracts\Posts\UserPostInterface;
 use App\Models\Post;
 use Illuminate\Support\Facades\Auth;
 use App\DataTransferObjects\PostDTO;
 
-class PostService
+class PostService implements UserPostInterface
 {
     public function store(PostDTO $dto): Post
     {

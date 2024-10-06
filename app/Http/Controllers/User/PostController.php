@@ -5,7 +5,7 @@ namespace App\Http\Controllers\User;
 use App\Http\Controllers\Controller;
 use App\Models\Post;
 use App\Models\User;
-use App\Services\Posts\PostService;
+use App\Contracts\Posts\UserPostInterface;
 use App\Http\Requests\App\PostRequest;
 use App\DataTransferObjects\PostDTO;
 use Illuminate\Support\Facades\Auth;
@@ -15,7 +15,7 @@ class PostController extends Controller
 {
     protected $postService;
 
-    public function __construct(PostService $postService)
+    public function __construct(UserPostInterface $postService)
     {
         $this->postService = $postService;
     }
