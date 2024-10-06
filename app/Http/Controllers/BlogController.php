@@ -2,44 +2,30 @@
 
 namespace App\Http\Controllers;
 
-use App\Contracts\Posts\PostsFilter;
-use Illuminate\Http\Request;
-use App\Models\Post;
+use App\Contracts\Posts\BlogPostInterface;
+use App\Http\Requests\App\FilterPostsRequest;
 
 class BlogController extends Controller
 {
-    protected $filterService;
+    protected $postService;
 
-    public function __construct(PostsFilter $filterService)
+    public function __construct(BlogPostInterface $postService)
     {
-        $this->filterService = $filterService;
+        $this->postService = $postService;
     }
 
-    public function index(Request $request)
+    public function index(FilterPostsRequest $request)
     {
-        $validated = $request->validate([
-            'search' => ['nullable', 'string', 'max:50'],
-            'from_date' => ['nullable', 'string', 'date'],
-            'to_date' => ['nullable', 'string', 'date', 'after:from_date'],
-            'tag' => ['nullable', 'string', 'max:20'],
-        ]);
-
-        $posts = $this->filterService->getPosts($validated);
+        $posts = $this->postService->getPosts($request);
 
         return view('blog.index', compact('posts'));
     }
 
 
-    public function show($post) 
+    public function show(string $post_id) 
     {
-        $post = cache()->remember(
-            key: "posts.{$post}", 
-            ttl: now()->addHour(), 
-            callback: function() use ($post) {
-                return Post::query()->findOrFail($post);
-            });
+        $post = $this->postService->showPost($post_id);
 
-        
         if (is_Null($post)) {
             abort(404);
         } 
