@@ -9,6 +9,7 @@ use App\Services\Posts\PostService;
 use App\Http\Requests\Api\PostRequest;
 use App\DataTransferObjects\PostDTO;
 use Illuminate\Support\Facades\Gate;
+use Illuminate\Support\Facades\Auth;
 
 class PostController extends Controller
 {
@@ -26,18 +27,14 @@ class PostController extends Controller
 
     public function store(PostRequest $request)
     {
-        try {
-            $post = $this->postService->store(
-                PostDTO::fromApiRequest($request)
-            );
-            
-            return response()->json([
-                'message' => 'Post created successfully!',
-                'post' => PostResource::make($post)
-            ], 201);
-        } catch (\Exception $e) {
-            return response()->json(['message' => $e->getMessage()], 401);
-        }
+        $post = $this->postService->store(
+            PostDTO::fromApiRequest($request)
+        );
+        
+        return response()->json([
+            'message' => 'Post created successfully!',
+            'post' => PostResource::make($post)
+        ], 201);
     }
 
     public function show(string $post)
@@ -52,19 +49,15 @@ class PostController extends Controller
             return response()->json(['message' => 'Unauthorized'], 403);
         }
 
-        try {
-            $updatedPost = $this->postService->update(
-                PostDTO::fromApiRequest($request),
-                $post,
-            );
-            
-            return response()->json([
-                'message' => 'Post updated successfully!',
-                'post' => PostResource::make($updatedPost)
-            ], 200);
-        } catch (\Exception $e) {
-            return response()->json(['message' => 'An unexpected error occurred.'], 500);
-        }
+        $updatedPost = $this->postService->update(
+            PostDTO::fromApiRequest($request),
+            $post,
+        );
+        
+        return response()->json([
+            'message' => 'Post updated successfully!',
+            'post' => PostResource::make($updatedPost)
+        ], 200);
     }
 
     public function destroy(string $post)

@@ -34,17 +34,13 @@ class PostController extends Controller
 
     public function store(PostRequest $request)
     {
-        try {
-            $post = $this->postService->store(
-                PostDTO::fromAppRequest($request)
-            );
-            
-            session()->flash('success', 'Post created successfully!');        
-            return redirect()->route('user.posts.show', $post);
+        $post = $this->postService->store(
+            PostDTO::fromAppRequest($request)
+        );
         
-        } catch (\Exception $e) {
-            return redirect()->back()->withErrors(['error' => $e->getMessage()]);
-        }
+        session()->flash('success', 'Post created successfully!');        
+        return redirect()->route('user.posts.show', $post);
+
     }
 
     public function show(string $post_id) 
@@ -67,17 +63,13 @@ class PostController extends Controller
         // Authorizing the action
         Gate::authorize('modify', $post);
 
-        try {
-            $updatedPost = $this->postService->update(
-                PostDTO::fromAppRequest($request),
-                $post,
-            );
+        $updatedPost = $this->postService->update(
+            PostDTO::fromAppRequest($request),
+            $post,
+        );
 
-            session()->flash('success', 'Post was changed successfully!');
-            return redirect()->route('user.posts.show', $updatedPost);
-        } catch (\Exception $e) {
-            return redirect()->back()->withErrors(['error' => $e->getMessage()]);
-        }
+        session()->flash('success', 'Post was changed successfully!');
+        return redirect()->route('user.posts.show', $updatedPost);
     }
 
     public function destroy(Post $post) 
