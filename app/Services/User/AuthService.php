@@ -6,7 +6,7 @@ use Illuminate\Support\Facades\Auth;
 use App\Models\User;
 use App\DataTransferObjects\AuthDTO;
 use App\Contracts\User\AuthInterface;
-use App\Http\Requests\App\LoginRequest;
+use App\Http\Requests\LoginRequest;
 use Illuminate\Http\Request;
 
 
