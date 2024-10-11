@@ -6,24 +6,33 @@ use Illuminate\Support\Facades\Auth;
 use App\Models\User;
 use App\DataTransferObjects\AuthDTO;
 use App\Contracts\User\AuthInterface;
-use App\Http\Requests\LoginRequest;
+use App\Http\Requests\BaseLoginRequest;
 use Illuminate\Http\Request;
 
 
 class AuthService implements AuthInterface
 {
-    public function register(AuthDTO $dto)
+    public function register(AuthDTO $dto, bool $api = false)
     {
         $user = User::create([
             'name' => $dto->name,
             'email' => $dto->email,
             'password' => $dto->password,
         ]);
-
-        Auth::login($user);
+    
+        if ($api) {
+            $token = $user->createToken($dto->name);
+            return [
+                'user' => $user,
+                'token' => $token->plainTextToken,
+            ];
+        } else {
+            Auth::login($user);
+        }
     }
+    
 
-    public function login(LoginRequest $request)
+    public function login(BaseLoginRequest $request)
     {
         if (Auth::attempt($request->validated(), $request->remember)) {
             return true;

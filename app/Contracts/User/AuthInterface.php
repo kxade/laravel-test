@@ -8,7 +8,7 @@ use Illuminate\Http\Request;
 
 interface AuthInterface
 {
-    public function register(AuthDTO $dto);
+    public function register(AuthDTO $dto, bool $api);
 
     public function login(BaseLoginRequest $request);
 
