@@ -12,7 +12,14 @@ use Illuminate\Http\Request;
 
 class AuthService implements AuthInterface
 {
-    public function register(AuthDTO $dto, bool $api = false)
+    protected $context;
+
+    public function __construct($context = 'web')
+    {
+        $this->context = $context;
+    }
+
+    public function register(AuthDTO $dto)
     {
         $user = User::create([
             'name' => $dto->name,
@@ -20,13 +27,13 @@ class AuthService implements AuthInterface
             'password' => $dto->password,
         ]);
     
-        if ($api) {
+        if ($this->context === 'api') {
             $token = $user->createToken($dto->name);
             return [
                 'user' => $user,
                 'token' => $token->plainTextToken,
             ];
-        } else {
+        } elseif ($this->context === 'web') {
             Auth::login($user);
         }
     }
@@ -45,5 +52,10 @@ class AuthService implements AuthInterface
 
         $request->session()->invalidate();
         $request->session()->regenerateToken();
+    }
+
+    public function apiSource()
+    {
+        $this->context = 'api';
     }
 }

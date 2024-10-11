@@ -15,10 +15,11 @@ class AuthController extends Controller
     public function __construct(AuthInterface $authService)
     {
         $this->authService = $authService;
+        $this->authService->apiSource();
     }
     
     public function register(RegisterRequest $request) {
-        $response = $this->authService->register(AuthDTO::fromApiRegisterRequest($request), api: true);
+        $response = $this->authService->register(AuthDTO::fromApiRegisterRequest($request));
         return response()->json($response, 201);
     }
 
