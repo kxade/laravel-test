@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Http\Requests\LoginRequest;
+use App\Http\Requests\BaseLoginRequest;
 use App\Contracts\User\AuthInterface;
 
 class LoginController extends Controller
@@ -20,7 +20,7 @@ class LoginController extends Controller
         return view('login.index');
     }
 
-    public function store(LoginRequest $request) 
+    public function store(BaseLoginRequest $request) 
     {
         $auth = $this->authService->login($request);
 
