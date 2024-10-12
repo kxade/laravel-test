@@ -25,7 +25,7 @@ class AuthController extends Controller
     }
 
     public function login(BaseLoginRequest $request) {
-        $response = $this->authService->login($request);
+        $response = $this->authService->login(AuthDTO::anyLoginRequest($request));
         return response()->json($response, 201);
     }
 

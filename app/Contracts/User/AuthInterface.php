@@ -10,7 +10,7 @@ interface AuthInterface
 {
     public function register(AuthDTO $dto);
 
-    public function login(BaseLoginRequest $request);
+    public function login(AuthDTO $dto);
 
     public function logout(Request $request);
 }

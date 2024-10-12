@@ -24,6 +24,7 @@ class BaseLoginRequest extends FormRequest
         return [
             'email' => ['required', 'email', 'exists:users'],
             'password' => ['required'],
+            'remember' => ['nullable', 'boolean'],
         ];
     }
 }

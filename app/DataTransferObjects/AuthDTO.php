@@ -4,13 +4,15 @@ namespace App\DataTransferObjects;
 
 use App\Http\Requests\App\RegisterRequest as AppRegisterRequest;
 use App\Http\Requests\Api\RegisterRequest as ApiRegisterRequest;
+use App\Http\Requests\BaseLoginRequest;
 
 readonly class AuthDTO
 {
     public function __construct(
-        public string $name,
+        public ?string $name,
         public string $email,
-        public string $password
+        public string $password,
+        public ?bool $remember = false,
     )
     {
     }
@@ -33,4 +35,13 @@ readonly class AuthDTO
         );
     }
 
+    public static function anyLoginRequest(BaseLoginRequest $request): AuthDTO
+    {   
+        return new self(
+            name: null,  // No name for login
+            email: $request->validated('email'),
+            password: $request->validated('password'),
+            remember: $request->validated('remember') ?? false,
+        );
+    }
 }
