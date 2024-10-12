@@ -15,6 +15,15 @@ class AuthService implements AuthInterface
 {
     protected $context;
 
+    protected static function getToken($user)
+    {
+        $token = $user->createToken($user->name);
+        return [
+                'user' => $user,
+                'token' => $token->plainTextToken,
+            ];
+    }
+
     public function __construct($context = 'web')
     {
         $this->context = $context;
@@ -29,11 +38,7 @@ class AuthService implements AuthInterface
         ]);
     
         if ($this->context === 'api') {
-            $token = $user->createToken($dto->name);
-            return [
-                'user' => $user,
-                'token' => $token->plainTextToken,
-            ];
+            return self::getToken($user);    
         } elseif ($this->context === 'web') {
             Auth::login($user);
         }
@@ -58,11 +63,7 @@ class AuthService implements AuthInterface
                 ];
             };
 
-            $token = $user->createToken($user->name);
-            return [
-                'user' => $user,
-                'token' => $token->plainTextToken,
-            ];
+            return self::getToken($user);
         }    
     }
 
