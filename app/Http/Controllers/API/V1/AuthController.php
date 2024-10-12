@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\DataTransferObjects\AuthDTO;
 use App\Http\Requests\Api\RegisterRequest;
+use App\Http\Requests\BaseLoginRequest;
 use App\Contracts\User\AuthInterface;
 
 class AuthController extends Controller
@@ -23,11 +24,13 @@ class AuthController extends Controller
         return response()->json($response, 201);
     }
 
-    public function login(Request $request) {
-        return 'login';
+    public function login(BaseLoginRequest $request) {
+        $response = $this->authService->login($request);
+        return response()->json($response, 201);
     }
 
     public function logout(Request $request) {
-        return 'logout';
+        $response = $this->authService->logout($request);
+        return response()->json($response, 201);
     }
 }

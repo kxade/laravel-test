@@ -3,11 +3,12 @@
 namespace App\Services\User;
 
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Http\Request;
 use App\Models\User;
 use App\DataTransferObjects\AuthDTO;
 use App\Contracts\User\AuthInterface;
 use App\Http\Requests\BaseLoginRequest;
-use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Hash;
 
 
 class AuthService implements AuthInterface
@@ -41,17 +42,47 @@ class AuthService implements AuthInterface
 
     public function login(BaseLoginRequest $request)
     {
-        if (Auth::attempt($request->validated(), $request->remember)) {
-            return true;
-        }
+        if ($this->context === 'web') {
+            // Login from Web
+            if (Auth::attempt($request->validated(), $request->remember)) {
+                return true;
+            }
+        } elseif ($this->context === 'api') {
+            // Login from API
+            $user = User::where('email', $request->email)->first();
+
+            if (!$user || !Hash::check($request->password, $user->password))
+            {
+                return [
+                    'message' => 'The provided credintials are incorrect.'
+                ];
+            };
+
+            $token = $user->createToken($user->name);
+            return [
+                'user' => $user,
+                'token' => $token->plainTextToken,
+            ];
+        }    
     }
 
     public function logout(Request $request)
     {
-        Auth::logout();
+        if ($this->context === 'web') {
+            // Login from Web
+            Auth::logout();
+    
+            $request->session()->invalidate();
+            $request->session()->regenerateToken();
 
-        $request->session()->invalidate();
-        $request->session()->regenerateToken();
+        } elseif (($this->context === 'api')) {
+
+            $request->user()->tokens()->delete();
+
+            return [
+                'message' => 'You are logged out',
+            ];
+        }
     }
 
     public function apiSource()
