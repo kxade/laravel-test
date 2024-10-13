@@ -55,4 +55,9 @@ class PostService implements UserPostInterface
 
         return $post;
     }
+
+    public function delete(Post $post)
+    {
+        dd($post->delete());
+    }
 }

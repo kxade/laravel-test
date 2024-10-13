@@ -77,7 +77,7 @@ class PostController extends Controller
         // Authorizing the action
         Gate::authorize('modify', $post);
         
-        $post->delete();
+        $this->postService->delete($post);
         
         return back()->with('delete', 'Ваш пост был удален');
     }

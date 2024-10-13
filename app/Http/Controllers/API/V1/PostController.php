@@ -72,7 +72,7 @@ class PostController extends Controller implements HasMiddleware
     {
         Gate::authorize('modify', $post);
 
-        $post->delete();
+        $this->postService->delete($post);
 
         return response()->json(['message' => 'Post deleted successfully!'], 201);
     }
