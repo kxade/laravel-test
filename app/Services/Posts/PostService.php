@@ -22,9 +22,6 @@ class PostService implements UserPostInterface
     public function store(PostDTO $dto): Post
     {
         $user = Auth::user();
-        if (!$user) {
-            throw new \Exception('Unauthenticated');
-        }
 
         $data = [
             'title' => $dto->title,

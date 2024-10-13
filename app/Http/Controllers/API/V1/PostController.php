@@ -10,14 +10,24 @@ use App\Http\Requests\Api\PostRequest;
 use App\DataTransferObjects\PostDTO;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Routing\Controllers\Middleware;
+use Illuminate\Routing\Controllers\HasMiddleware;
 
-class PostController extends Controller
+
+class PostController extends Controller implements HasMiddleware
 {
     protected $postService;
 
     public function __construct(PostService $postService)
     {
         $this->postService = $postService;
+    }
+
+    public static function middleware()
+    {
+        return [
+            new Middleware('auth:sanctum', except: ['index', 'show'])
+        ];
     }
 
     public function index()
@@ -45,9 +55,7 @@ class PostController extends Controller
     public function update(PostRequest $request, Post $post)
     {
         // Authorizing the action
-        if (Auth::user()->cannot('modify', $post)) {
-            return response()->json(['message' => 'Unauthorized'], 403);
-        }
+        Gate::authorize('modify', $post);
 
         $updatedPost = $this->postService->update(
             PostDTO::fromApiRequest($request),
@@ -60,10 +68,12 @@ class PostController extends Controller
         ], 200);
     }
 
-    public function destroy(string $post)
+    public function destroy(Post $post)
     {
         Gate::authorize('modify', $post);
 
-        Post::findOrFail($post)->delete();
+        $post->delete();
+
+        return response()->json(['message' => 'Post deleted successfully!'], 201);
     }
 }
