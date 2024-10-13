@@ -10,7 +10,6 @@ use App\Http\Requests\App\PostRequest;
 use App\DataTransferObjects\PostDTO;
 use Illuminate\Support\Facades\Gate;
 
-
 class PostController extends Controller
 {
     protected $postService;

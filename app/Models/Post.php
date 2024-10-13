@@ -29,7 +29,7 @@ class Post extends Model
 
 
     public function isPublished(): bool {
-        return $this->published &&  $this->published_at; 
+        return $this->published && $this->published_at; 
     }
 
     public function user(): BelongsTo 
