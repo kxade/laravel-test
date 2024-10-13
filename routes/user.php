@@ -3,8 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\User\PostController;
 
-
-Route::prefix('user')->middleware('auth')->group(function () {
+Route::prefix('user')->group(function () {
     Route::redirect('/', 'user/posts')->name('user');
 
     Route::get('posts', [PostController::class, 'index'])->name('user.posts.index');
@@ -14,6 +13,9 @@ Route::prefix('user')->middleware('auth')->group(function () {
     Route::post('posts', [PostController::class, 'store'])->name('user.posts.store');
 
     Route::get('posts/{post}', [PostController::class, 'show'])->name('user.posts.show');
+});
+
+Route::prefix('user')->middleware('auth')->group(function () {
 
     Route::get('posts/{post}/edit', [PostController::class, 'edit'])->name('user.posts.edit');
 
