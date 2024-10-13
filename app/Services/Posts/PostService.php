@@ -6,6 +6,8 @@ use App\Contracts\Posts\UserPostInterface;
 use App\Models\Post;
 use Illuminate\Support\Facades\Auth;
 use App\DataTransferObjects\PostDTO;
+use Illuminate\Support\Facades\Gate;
+
 
 class PostService implements UserPostInterface
 {
@@ -37,10 +39,7 @@ class PostService implements UserPostInterface
 
     public function update(PostDto $dto, Post $post): Post
     {
-        $user = Auth::user();
-        if (!$user) {
-            throw new \Exception('Unauthenticated');
-        }
+        Gate::authorize('modify', $post);
 
         $data = [
             'title' => $dto->title,
@@ -58,6 +57,8 @@ class PostService implements UserPostInterface
 
     public function delete(Post $post)
     {
+        Gate::authorize('modify', $post);
+
         dd($post->delete());
     }
 }

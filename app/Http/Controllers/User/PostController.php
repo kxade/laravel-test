@@ -8,8 +8,8 @@ use App\Models\User;
 use App\Contracts\Posts\UserPostInterface;
 use App\Http\Requests\App\PostRequest;
 use App\DataTransferObjects\PostDTO;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Gate;
+
 
 class PostController extends Controller
 {
@@ -60,9 +60,6 @@ class PostController extends Controller
 
     public function update(PostRequest $request, Post $post) 
     {
-        // Authorizing the action
-        Gate::authorize('modify', $post);
-
         $updatedPost = $this->postService->update(
             PostDTO::fromAppRequest($request),
             $post,
@@ -74,9 +71,6 @@ class PostController extends Controller
 
     public function destroy(Post $post) 
     {
-        // Authorizing the action
-        Gate::authorize('modify', $post);
-        
         $this->postService->delete($post);
         
         return back()->with('delete', 'Ваш пост был удален');
