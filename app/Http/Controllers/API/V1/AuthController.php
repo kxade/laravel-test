@@ -17,8 +17,9 @@ class AuthController extends Controller
     }
     
     public function register(RegisterRequest $request) {
-        $response = $this->authService->register(AuthDTO::fromApiRegisterRequest($request));
-        return response()->json($response, 201);
+        $user = $this->authService->register(AuthDTO::fromApiRegisterRequest($request));
+        $data = $this->authService->getUserData($user);
+        return response()->json($data, 201);
     }
 
     public function login(BaseLoginRequest $request) {

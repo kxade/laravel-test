@@ -13,7 +13,7 @@ use Illuminate\Support\Facades\Hash;
 
 class AuthService implements AuthInterface
 {
-    protected static function getToken($user)
+    public function getUserData($user)
     {
         $token = $user->createToken($user->name);
         return [
@@ -29,12 +29,10 @@ class AuthService implements AuthInterface
             'email' => $dto->email,
             'password' => $dto->password,
         ]);
-    
-        if ($this->context === 'api') {
-            return self::getToken($user);    
-        } elseif ($this->context === 'web') {
-            Auth::login($user);
-        }
+
+        Auth::login($user);
+
+        return $user;
     }
     
 
