@@ -11,12 +11,9 @@ use App\Contracts\User\AuthInterface;
 
 class AuthController extends Controller
 {
-    protected $authService;
-
-    public function __construct(AuthInterface $authService)
+    public function __construct(protected AuthInterface $authService) 
     {
-        $this->authService = $authService;
-        $this->authService->apiSource();
+        //
     }
     
     public function register(RegisterRequest $request) {

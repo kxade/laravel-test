@@ -13,8 +13,6 @@ use Illuminate\Support\Facades\Hash;
 
 class AuthService implements AuthInterface
 {
-    protected $context;
-
     protected static function getToken($user)
     {
         $token = $user->createToken($user->name);
@@ -22,11 +20,6 @@ class AuthService implements AuthInterface
                 'user' => $user,
                 'token' => $token->plainTextToken,
             ];
-    }
-
-    public function __construct($context = 'web')
-    {
-        $this->context = $context;
     }
 
     public function register(AuthDTO $dto)

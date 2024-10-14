@@ -8,11 +8,9 @@ use App\Contracts\User\AuthInterface;
 
 class RegisterController extends Controller
 {
-    protected $authService;
-
-    public function __construct(AuthInterface $authService)
+    public function __construct(protected AuthInterface $authService) 
     {
-        $this->authService = $authService;
+        //
     }
 
     public function index() 

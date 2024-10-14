@@ -21,12 +21,6 @@ class AppServiceProvider extends ServiceProvider
     {
         $this->app->bind(BlogPostInterface::class, BlogPostService::class);
         $this->app->bind(UserPostInterface::class, PostService::class);
-
-        // $this->app->bind(AuthInterface::class, function ($app) {
-        //     $context = $app->request->is('api/*') ? 'api' : 'web'; // Example logic to determine context
-        //     return new AuthService($context);
-        // });
-
         $this->app->bind(AuthInterface::class, AuthService::class);
     }
 
