@@ -34,30 +34,17 @@ class AuthService implements AuthInterface
 
         return $user;
     }
-    
 
     public function login(AuthDTO $dto)
     {
-        if ($this->context === 'web') {
-            // Login from Web
-            $credentials = ['email' => $dto->email, 'password' => $dto->password];
-            if (Auth::attempt($credentials, $dto->remember)) {
-                return true;
-            }
-        
-        } elseif ($this->context === 'api') {
-            // Login from API
-            $user = User::where('email', $dto->email)->first();
+        $credentials = ['email' => $dto->email, 'password' => $dto->password];
+        if (!Auth::attempt($credentials, $dto->remember)) {
+            throw ValidationException::withMessages([
+                'email' => ['The provided credentials are incorrect.'],
+            ]);
+        }
 
-            if (!$user || !Hash::check($dto->password, $user->password))
-            {
-                return [
-                    'message' => 'The provided credintials are incorrect.'
-                ];
-            };
-
-            return self::getToken($user);
-        }    
+        return Auth::user();
     }
 
     public function logout(Request $request)

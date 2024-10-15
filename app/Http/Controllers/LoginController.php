@@ -21,11 +21,11 @@ class LoginController extends Controller
 
     public function store(BaseLoginRequest $request) 
     {
-        $auth = $this->authService->login(AuthDTO::anyLoginRequest($request));
-
-        if ($auth) {
+        try {
+            $user = $this->authService->login($request->all());
+    
             return redirect()->intended('user');
-        } else {
+        } catch (ValidationException $e) {
             return back()->withErrors(['failed' => 'Не получилось найти пользователя с таким логином и паролем.']);
         }
     }
