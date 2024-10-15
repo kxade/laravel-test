@@ -36,11 +36,9 @@ class AuthService implements AuthInterface
     public function login(AuthDTO $dto)
     {
         $credentials = ["email" => $dto->email, "password" => $dto->password];
-        
+
         if (!Auth::attempt($credentials, $dto->remember)) {
-            throw ValidationException::withMessages([
-                "email" => ["The provided credentials are incorrect."],
-            ]);
+            throw new AuthenticationException("The provided credentials are incorrect.");
         }
 
         return Auth::user();

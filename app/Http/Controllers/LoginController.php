@@ -28,9 +28,10 @@ class LoginController extends Controller
 
             return redirect()->intended("user");
         } catch (ValidationException $e) {
+
             return back()->withErrors([
                 "failed" => "Не получилось найти пользователя с таким логином и паролем.",
-            ]);
+            ])->withInput();
         }
     }
 
