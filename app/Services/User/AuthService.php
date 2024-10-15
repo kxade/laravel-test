@@ -49,20 +49,12 @@ class AuthService implements AuthInterface
 
     public function logout(Request $request)
     {
-        if ($this->context === 'web') {
-            // Login from Web
-            Auth::logout();
+        Auth::logout();
+        $request->session()->invalidate();
+        $request->session()->regenerateToken();
     
-            $request->session()->invalidate();
-            $request->session()->regenerateToken();
-
-        } elseif (($this->context === 'api')) {
-
+        if ($request->wantsJson()) {
             $request->user()->tokens()->delete();
-
-            return [
-                'message' => 'You are logged out',
-            ];
         }
     }
 
