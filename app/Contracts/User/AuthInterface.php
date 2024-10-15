@@ -3,7 +3,7 @@
 namespace App\Contracts\User;
 
 use App\DTO\AuthDTO;
-use App\Http\Requests\BaseLoginRequest;
+use App\Http\Requests\LoginRequest;
 use Illuminate\Http\Request;
 
 interface AuthInterface

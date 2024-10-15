@@ -6,7 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Resources\PostResource;
 use App\Models\Post;
 use App\Services\Posts\PostService;
-use App\Http\Requests\Api\PostRequest;
+use App\Http\Requests\Posts\PostRequest;
 use App\DTO\PostDTO;
 use Illuminate\Routing\Controllers\Middleware;
 use Illuminate\Routing\Controllers\HasMiddleware;

@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Contracts\User\AuthInterface;
 use App\DTO\AuthDTO;
-use App\Http\Requests\BaseLoginRequest;
+use App\Http\Requests\LoginRequest;
 use Illuminate\Http\Request;
 
 class LoginController extends Controller
@@ -19,11 +19,11 @@ class LoginController extends Controller
         return view("login.index");
     }
 
-    public function store(BaseLoginRequest $request)
+    public function store(LoginRequest $request)
     {
         try {
             $user = $this->authService->login(
-                AuthDTO::anyLoginRequest($request)
+                AuthDTO::loginRequest($request)
             );
 
             return redirect()->intended("user");

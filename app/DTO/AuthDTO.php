@@ -2,9 +2,9 @@
 
 namespace App\DTO;
 
-use App\Http\Requests\App\RegisterRequest as AppRegisterRequest;
-use App\Http\Requests\Api\RegisterRequest as ApiRegisterRequest;
-use App\Http\Requests\BaseLoginRequest;
+use App\Http\Requests\Auth\App\RegisterRequest as AppRegisterRequest;
+use App\Http\Requests\Auth\Api\RegisterRequest as ApiRegisterRequest;
+use App\Http\Requests\LoginRequest;
 
 readonly class AuthDTO
 {
@@ -37,7 +37,7 @@ readonly class AuthDTO
         );
     }
 
-    public static function anyLoginRequest(BaseLoginRequest $request): AuthDTO
+    public static function loginRequest(LoginRequest $request): AuthDTO
     {   
         return new self(
             name: null,  // No name for login

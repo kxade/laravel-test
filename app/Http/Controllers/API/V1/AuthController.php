@@ -5,8 +5,8 @@ namespace App\Http\Controllers\API\V1;
 use App\Contracts\User\AuthInterface;
 use App\DTO\AuthDTO;
 use App\Http\Controllers\Controller;
-use App\Http\Requests\Api\RegisterRequest;
-use App\Http\Requests\BaseLoginRequest;
+use App\Http\Requests\Auth\Api\RegisterRequest;
+use App\Http\Requests\LoginRequest;
 use Illuminate\Http\Request;
 
 class AuthController extends Controller
@@ -26,9 +26,9 @@ class AuthController extends Controller
         return response()->json($data, 201);
     }
 
-    public function login(BaseLoginRequest $request)
+    public function login(LoginRequest $request)
     {
-        $user = $this->authService->login(AuthDTO::anyLoginRequest($request));
+        $user = $this->authService->login(AuthDTO::loginRequest($request));
         $data = $this->authService->getUserData($user);
 
         return response()->json($data, 201);

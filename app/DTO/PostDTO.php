@@ -1,10 +1,8 @@
 <?php
-
 namespace App\DTO;
 
 use App\Enums\PostSource;
-use App\Http\Requests\App\PostRequest as AppPostRequest;
-use App\Http\Requests\Api\PostRequest as ApiPostRequest;
+use App\Http\Requests\Posts\PostRequest as PostRequest;
 
 readonly class PostDTO
 {
@@ -15,12 +13,11 @@ readonly class PostDTO
         public ?bool $published,
         public ?int $category_id,
         public PostSource $source,
-    )
+    ) 
     {
-
     }
-    
-    public static function fromAppRequest(AppPostRequest $request)
+
+    private static function fromRequest(PostRequest $request, PostSource $source): self
     {
         return new self(
             title: $request->validated('title'),
@@ -28,19 +25,17 @@ readonly class PostDTO
             published_at: $request->validated('published_at'),
             published: $request->validated('published'),
             category_id: $request->validated('category_id'),
-            source: PostSource::App,
+            source: $source,
         );
     }
 
-    public static function fromApiRequest(ApiPostRequest $request)
+    public static function fromAppRequest(PostRequest $request): self
     {
-        return new self(
-            title: $request->validated('title'),
-            content: $request->validated('content'),
-            published_at: $request->validated('published_at'),
-            published: $request->validated('published'),
-            category_id: $request->validated('category_id'),
-            source: PostSource::Api,
-        );
+        return self::fromRequest($request, PostSource::App);
+    }
+
+    public static function fromApiRequest(PostRequest $request): self
+    {
+        return self::fromRequest($request, PostSource::Api);
     }
 }

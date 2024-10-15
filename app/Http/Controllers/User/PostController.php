@@ -6,7 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Post;
 use App\Models\User;
 use App\Contracts\Posts\UserPostInterface;
-use App\Http\Requests\App\PostRequest;
+use App\Http\Requests\Posts\PostRequest;
 use App\DTO\PostDTO;
 use Illuminate\Support\Facades\Gate;
 
@@ -16,7 +16,6 @@ class PostController extends Controller
 
     public function __construct(UserPostInterface $postService)
     {
-        $this->postService = $postService;
     }
 
     public function index() 
@@ -42,7 +41,7 @@ class PostController extends Controller
 
     }
 
-    public function show(string $post_id) 
+    public function show(int $post_id) 
     {
         $post = $this->postService->showPost($post_id);
 

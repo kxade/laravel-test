@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Http\Requests\App;
+namespace App\Http\Requests\Auth\App;
 
-use App\Http\Requests\BaseRegisterRequest;
+use App\Http\Requests\Auth\BaseRegisterRequest;
 
 class RegisterRequest extends BaseRegisterRequest
 {

@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Contracts\User\AuthInterface;
 use App\DTO\AuthDTO;
-use App\Http\Requests\App\RegisterRequest;
+use App\Http\Requests\Auth\App\RegisterRequest;
 
 class RegisterController extends Controller
 {
