@@ -7,7 +7,7 @@ use App\Models\Post;
 use App\Models\User;
 use App\Contracts\Posts\UserPostInterface;
 use App\Http\Requests\App\PostRequest;
-use App\DataTransferObjects\PostDTO;
+use App\DTO\PostDTO;
 use Illuminate\Support\Facades\Gate;
 
 class PostController extends Controller

@@ -2,28 +2,26 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\App\RegisterRequest;
-use App\DataTransferObjects\AuthDTO;
 use App\Contracts\User\AuthInterface;
+use App\DTO\AuthDTO;
+use App\Http\Requests\App\RegisterRequest;
 
 class RegisterController extends Controller
 {
-    public function __construct(protected AuthInterface $authService) 
+    public function __construct(protected AuthInterface $authService)
     {
         //
     }
 
-    public function index() 
+    public function index()
     {
-        return view('register.index');
+        return view("register.index");
     }
 
-    public function store(RegisterRequest $request) 
-    {    
-        $this->authService->register(
-            AuthDTO::fromAppRegisterRequest($request)
-        );
-        
-        return redirect()->route('home');
+    public function store(RegisterRequest $request)
+    {
+        $this->authService->register(AuthDTO::fromAppRegisterRequest($request));
+
+        return redirect()->route("home");
     }
 }

@@ -5,7 +5,7 @@ namespace App\Services\Posts;
 use App\Contracts\Posts\UserPostInterface;
 use App\Models\Post;
 use Illuminate\Support\Facades\Auth;
-use App\DataTransferObjects\PostDTO;
+use App\DTO\PostDTO;
 use Illuminate\Support\Facades\Gate;
 
 

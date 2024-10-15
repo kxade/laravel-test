@@ -3,7 +3,7 @@
 namespace App\Contracts\Posts;
 
 use App\Http\Requests\App\FilterPostsRequest;
-use App\DataTransferObjects\FilterPostsDTO;
+use App\DTO\FilterPostsDTO;
 
 interface BlogPostInterface
 {

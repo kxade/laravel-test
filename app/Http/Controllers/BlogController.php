@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Contracts\Posts\BlogPostInterface;
 use App\Http\Requests\App\FilterPostsRequest;
-use App\DataTransferObjects\FilterPostsDTO;
+use App\DTO\FilterPostsDTO;
 
 class BlogController extends Controller
 {

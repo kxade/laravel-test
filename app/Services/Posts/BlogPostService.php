@@ -5,7 +5,7 @@ namespace App\Services\Posts;
 use App\Contracts\Posts\BlogPostInterface;
 use App\Models\Post;
 use App\Http\Requests\App\FilterPostsRequest;
-use App\DataTransferObjects\FilterPostsDTO;
+use App\DTO\FilterPostsDTO;
 use Carbon\Carbon;
 
 class BlogPostService implements BlogPostInterface

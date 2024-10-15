@@ -2,7 +2,7 @@
 
 namespace App\Contracts\User;
 
-use App\DataTransferObjects\AuthDTO;
+use App\DTO\AuthDTO;
 use App\Http\Requests\BaseLoginRequest;
 use Illuminate\Http\Request;
 

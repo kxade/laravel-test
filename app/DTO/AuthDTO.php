@@ -1,6 +1,6 @@
 <?php
 
-namespace App\DataTransferObjects;
+namespace App\DTO;
 
 use App\Http\Requests\App\RegisterRequest as AppRegisterRequest;
 use App\Http\Requests\Api\RegisterRequest as ApiRegisterRequest;

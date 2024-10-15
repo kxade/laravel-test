@@ -2,7 +2,7 @@
 
 namespace App\Contracts\Posts;
 
-use App\DataTransferObjects\PostDTO;
+use App\DTO\PostDTO;
 use App\Models\Post;
 
 interface UserPostInterface
