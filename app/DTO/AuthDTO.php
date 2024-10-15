@@ -12,7 +12,8 @@ readonly class AuthDTO
         public ?string $name,
         public string $email,
         public string $password,
-        public ?bool $remember = false,
+        public bool $remember = false,
+        public bool $agreement = false,
     )
     {
     }
@@ -23,6 +24,7 @@ readonly class AuthDTO
             name: $request->validated('name'),
             email: $request->validated('email'),
             password: $request->validated('password'),
+            agreement: $request->validated('agreement') ?? false,
         );
     }
 
