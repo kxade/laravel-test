@@ -16,7 +16,7 @@ class PostService implements UserPostInterface
         return Auth::user()->posts()->latest()->paginate(6);
     }
 
-    public function showPost(string $post_id)
+    public function showPost(int $post_id)
     {
         return Post::query()->findOrFail($post_id);
     }
@@ -37,8 +37,10 @@ class PostService implements UserPostInterface
         return $user->posts()->create($data);
     }
 
-    public function update(PostDto $dto, Post $post): Post
+    public function update(PostDto $dto, int $post_id): Post
     {
+        $post = Post::query()->findOrFail($post_id);
+
         Gate::authorize('modify', $post);
 
         $data = [
@@ -55,8 +57,10 @@ class PostService implements UserPostInterface
         return $post;
     }
 
-    public function delete(Post $post)
+    public function delete(int $post_id)
     {
+        $post = Post::query()->findOrFail($post_id);
+        
         Gate::authorize('modify', $post);
 
         dd($post->delete());

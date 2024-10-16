@@ -56,20 +56,20 @@ class PostController extends Controller
         return view('user.posts.edit', compact('post'));
     }
 
-    public function update(PostRequest $request, Post $post) 
+    public function update(PostRequest $request, int $post_id) 
     {
         $updatedPost = $this->postService->update(
             PostDTO::fromAppRequest($request),
-            $post,
+            $post_id,
         );
 
         session()->flash('success', 'Post was changed successfully!');
         return redirect()->route('user.posts.show', $updatedPost);
     }
 
-    public function destroy(Post $post) 
+    public function destroy(int $post_id) 
     {
-        $this->postService->delete($post);
+        $this->postService->delete($post_id);
         
         return back()->with('delete', 'Ваш пост был удален');
     }

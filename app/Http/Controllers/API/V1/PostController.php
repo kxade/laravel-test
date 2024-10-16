@@ -44,16 +44,16 @@ class PostController extends Controller implements HasMiddleware
         ], 201);
     }
 
-    public function show(string $post)
+    public function show(int $post_id)
     {
-        return new PostResource(Post::findOrFail($post));
+        return new PostResource(Post::findOrFail($post_id));
     }
 
-    public function update(PostRequest $request, Post $post)
+    public function update(PostRequest $request, int $post_id)
     {
         $updatedPost = $this->postService->update(
             PostDTO::fromApiRequest($request),
-            $post,
+            $post_id,
         );
         
         return response()->json([
@@ -62,9 +62,9 @@ class PostController extends Controller implements HasMiddleware
         ], 200);
     }
 
-    public function destroy(Post $post)
+    public function destroy(int $post_id)
     {
-        $this->postService->delete($post);
+        $this->postService->delete($post_id);
 
         return response()->json(['message' => 'Post deleted successfully!'], 201);
     }
