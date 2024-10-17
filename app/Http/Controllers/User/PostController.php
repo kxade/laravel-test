@@ -7,20 +7,19 @@ use App\Models\Post;
 use App\Models\User;
 use App\Contracts\Posts\UserPostInterface;
 use App\Http\Requests\Posts\PostRequest;
+use App\Http\Requests\Posts\FilterPostsRequest;
 use App\DTO\PostDTO;
 use Illuminate\Support\Facades\Gate;
 
 class PostController extends Controller
 {
-    protected $postService;
-
-    public function __construct(UserPostInterface $postService)
+    public function __construct(private UserPostInterface $postService)
     {
     }
 
     public function index() 
     {
-        $posts = $this->postService->getPosts();
+        $posts = $this->postService->getUserPosts();
 
         return view('user.posts.index', compact('posts'));
     }
@@ -87,7 +86,7 @@ class PostController extends Controller
     public function getPublicPosts(FilterPostsRequest $request)
     {
         $posts = $this->postService->getPosts(
-            PostsDTO::filterPostsRequest($request)
+            PostDTO::filterPostsRequest($request)
         );
 
         return view('blog.index', compact('posts'));

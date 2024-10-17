@@ -7,7 +7,7 @@ use App\Models\Post;
 
 interface UserPostInterface
 {
-    public function getPosts();
+    public function getPosts(PostDTO $dto);
     
     public function getUserPosts();
 
@@ -15,5 +15,5 @@ interface UserPostInterface
 
     public function store(PostDTO $dto);
 
-    public function update(PostDTO $dto, Post $post);
+    public function update(PostDTO $dto, int $post_id);
 }

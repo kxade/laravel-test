@@ -13,7 +13,7 @@ use Carbon\Carbon;
 
 class PostService implements UserPostInterface
 {
-    public function getPosts(PostsDTO $dto): \Illuminate\Contracts\Pagination\LengthAwarePaginator
+    public function getPosts(PostDTO $dto): \Illuminate\Contracts\Pagination\LengthAwarePaginator
     {
         $query = Post::with('user');
         

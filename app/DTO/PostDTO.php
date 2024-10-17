@@ -3,17 +3,17 @@ namespace App\DTO;
 
 use App\Enums\PostSource;
 use App\Http\Requests\Posts\PostRequest;
-use App\Http\Requests\App\FilterPostsRequest;
+use App\Http\Requests\Posts\FilterPostsRequest;
 
 readonly class PostDTO
 {
     public function __construct(
-        public string $title,
-        public string $content,
+        public ?string $title,
+        public ?string $content,
         public ?string $published_at,
         public ?bool $published,
         public ?int $category_id,
-        public PostSource $source,
+        public ?PostSource $source,
         public ?string $fromDate,
         public ?string $toDate,
         public ?string $search,
@@ -31,6 +31,10 @@ readonly class PostDTO
             published: $request->validated('published'),
             category_id: $request->validated('category_id'),
             source: $source,
+            search: null,
+            fromDate: null,
+            toDate: null,
+            tag: null,
         );
     }
 
@@ -51,6 +55,12 @@ readonly class PostDTO
             fromDate: $request->validated('from_date'),
             toDate: $request->validated('to_date'),
             tag: $request->validated('tag'),
+            title: null,
+            content: null,
+            published_at: null,
+            published: null,
+            category_id: null,
+            source: null,
         );
     }
 }
