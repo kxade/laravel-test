@@ -2,7 +2,8 @@
 namespace App\DTO;
 
 use App\Enums\PostSource;
-use App\Http\Requests\Posts\PostRequest as PostRequest;
+use App\Http\Requests\Posts\PostRequest;
+use App\Http\Requests\App\FilterPostsRequest;
 
 readonly class PostDTO
 {
@@ -13,11 +14,15 @@ readonly class PostDTO
         public ?bool $published,
         public ?int $category_id,
         public PostSource $source,
+        public ?string $fromDate,
+        public ?string $toDate,
+        public ?string $search,
+        public ?string $tag,
     ) 
     {
     }
 
-    private static function fromRequest(PostRequest $request, PostSource $source): self
+    private static function postRequest(PostRequest $request, PostSource $source): self
     {
         return new self(
             title: $request->validated('title'),
@@ -31,11 +36,21 @@ readonly class PostDTO
 
     public static function fromAppRequest(PostRequest $request): self
     {
-        return self::fromRequest($request, PostSource::App);
+        return self::postRequest($request, PostSource::App);
     }
 
     public static function fromApiRequest(PostRequest $request): self
     {
-        return self::fromRequest($request, PostSource::Api);
+        return self::postRequest($request, PostSource::Api);
+    }
+
+    public static function filterPostsRequest(FilterPostsRequest $request)
+    {
+        return new self(
+            search: $request->validated('search'),
+            fromDate: $request->validated('from_date'),
+            toDate: $request->validated('to_date'),
+            tag: $request->validated('tag'),
+        );
     }
 }

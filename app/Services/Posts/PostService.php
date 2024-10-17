@@ -6,7 +6,6 @@ use App\Contracts\Posts\UserPostInterface;
 use App\Models\Post;
 use Illuminate\Support\Facades\Auth;
 use App\DTO\PostDTO;
-use App\DTO\FilterPostsDTO;
 use Illuminate\Support\Facades\Gate;
 use Carbon\Carbon;
 
@@ -14,7 +13,7 @@ use Carbon\Carbon;
 
 class PostService implements UserPostInterface
 {
-    public function getPosts(FilterPostsDTO $dto): \Illuminate\Contracts\Pagination\LengthAwarePaginator
+    public function getPosts(PostsDTO $dto): \Illuminate\Contracts\Pagination\LengthAwarePaginator
     {
         $query = Post::with('user');
         

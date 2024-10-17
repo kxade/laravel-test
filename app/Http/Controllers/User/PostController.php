@@ -77,7 +77,7 @@ class PostController extends Controller
     public function usernamePosts(User $username)
     {
         $userPosts = $this->postService->getPosts();
-        
+
         return view('user.posts.username', [
             'posts' => $userPosts,
             'user' => $username
@@ -87,7 +87,7 @@ class PostController extends Controller
     public function getPublicPosts(FilterPostsRequest $request)
     {
         $posts = $this->postService->getPosts(
-            FilterPostsDTO::fromAppRequest($request)
+            PostsDTO::filterPostsRequest($request)
         );
 
         return view('blog.index', compact('posts'));
