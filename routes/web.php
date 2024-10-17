@@ -21,11 +21,6 @@ Route::middleware('guest')->group(function () {
 
 Route::post('/logout', [LoginController::class, 'logout'])->name('logout');
 
-// Routes for blog
-Route::get('blog', [BlogController::class, 'index'])->name('blog.index');
-Route::get('blog/{post}', [BlogController::class, 'show'])->name('blog.show');
-
-
 // If nothing is found
 Route::fallback(function () {
     return 'Fallback';

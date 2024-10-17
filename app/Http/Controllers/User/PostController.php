@@ -76,10 +76,28 @@ class PostController extends Controller
 
     public function usernamePosts(User $username)
     {
-        $userPosts = $username->posts()->latest()->paginate(6);
+        $userPosts = $this->postService->getPosts();
+        
         return view('user.posts.username', [
             'posts' => $userPosts,
             'user' => $username
         ]);
+    }
+
+    public function getPublicPosts(FilterPostsRequest $request)
+    {
+        $posts = $this->postService->getPosts(
+            FilterPostsDTO::fromAppRequest($request)
+        );
+
+        return view('blog.index', compact('posts'));
+    }
+
+
+    public function showPublic(int $post_id) 
+    {
+        $post = $this->postService->showPost($post_id);
+ 
+        return view('blog.show', compact('post'));
     }
 }

@@ -8,8 +8,10 @@ use App\Models\Post;
 interface UserPostInterface
 {
     public function getPosts();
+    
+    public function getUserPosts();
 
-    public function showPost(string $post_id);
+    public function showPost(int $post_id);
 
     public function store(PostDTO $dto);
 
