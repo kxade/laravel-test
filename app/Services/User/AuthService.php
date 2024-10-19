@@ -5,6 +5,7 @@ namespace App\Services\User;
 use App\Contracts\User\AuthInterface;
 use App\DTO\AuthDTO;
 use App\Models\User;
+use Illuminate\Auth\AuthenticationException;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -46,15 +47,16 @@ class AuthService implements AuthInterface
 
     public function logout(Request $request)
     {
-        Auth::logout();
-        $request->session()->invalidate();
-        $request->session()->regenerateToken();
-
         if ($request->wantsJson()) {
-            $request
-                ->user()
-                ->tokens()
-                ->delete();
+            // API logout using Sanctum tokens
+            if ($request->user()) {
+                $request->user()->tokens()->delete();
+            }
+        } else {
+            // Web logout using session-based authentication
+            Auth::logout();
+            $request->session()->invalidate();
+            $request->session()->regenerateToken();
         }
     }
 }

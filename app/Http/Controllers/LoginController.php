@@ -4,8 +4,9 @@ namespace App\Http\Controllers;
 
 use App\Contracts\User\AuthInterface;
 use App\DTO\AuthDTO;
-use App\Http\Requests\LoginRequest;
+use App\Http\Requests\Auth\LoginRequest;
 use Illuminate\Http\Request;
+use Illuminate\Validation\ValidationException;
 
 class LoginController extends Controller
 {

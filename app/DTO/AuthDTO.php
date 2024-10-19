@@ -4,7 +4,7 @@ namespace App\DTO;
 
 use App\Http\Requests\Auth\App\RegisterRequest as AppRegisterRequest;
 use App\Http\Requests\Auth\Api\RegisterRequest as ApiRegisterRequest;
-use App\Http\Requests\LoginRequest;
+use App\Http\Requests\Auth\LoginRequest;
 
 readonly class AuthDTO
 {

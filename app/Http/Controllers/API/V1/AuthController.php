@@ -6,7 +6,7 @@ use App\Contracts\User\AuthInterface;
 use App\DTO\AuthDTO;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Auth\Api\RegisterRequest;
-use App\Http\Requests\LoginRequest;
+use App\Http\Requests\Auth\LoginRequest;
 use Illuminate\Http\Request;
 
 class AuthController extends Controller
