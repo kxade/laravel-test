@@ -5,11 +5,13 @@
         <span class="navbar-toggler-icon"></span>
       </button>
       <div class="collapse navbar-collapse" id="navbar-collapse">
-        @php
-          function active_link(string $name, string $active = 'active'): string {
-              return Route::is($name) ? $active : '';
-          }
-        @endphp
+        @if (!function_exists('active_link'))
+          @php
+            function active_link(string $name, string $active = 'active'): string {
+                return Route::is($name) ? $active : '';
+            }
+          @endphp
+        @endif
         <ul class="navbar-nav me-auto mb-2 mb-md-0">
           <li class="nav-item">
             <a href="{{ route('home') }}" class="nav-link {{active_link('home') }}" aria-current="page" >
