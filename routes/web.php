@@ -1,6 +1,5 @@
 <?php
 
-use App\Http\Controllers\BlogController;  
 use App\Http\Controllers\RegisterController;
 use App\Http\Controllers\LoginController; 
 use Illuminate\Support\Facades\Route;
@@ -19,7 +18,7 @@ Route::middleware('guest')->group(function () {
     Route::post('/login', [LoginController::class, 'store'])->name('login.store');    
 });
 
-Route::post('/logout', [LoginController::class, 'logout'])->name('logout');
+Route::post('/logout', [LoginController::class, 'logout'])->middleware('auth')->name('logout');
 
 // If nothing is found
 Route::fallback(function () {

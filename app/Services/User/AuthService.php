@@ -7,7 +7,7 @@ use App\DTO\AuthDTO;
 use App\Models\User;
 use Illuminate\Auth\AuthenticationException;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
 
 class AuthService implements AuthInterface
 {
@@ -29,34 +29,26 @@ class AuthService implements AuthInterface
             "password" => $dto->password,
         ]);
 
-        Auth::login($user);
-
-        return $user;
+        return $this->getUserData($user);
     }
 
     public function login(AuthDTO $dto)
     {
-        $credentials = ["email" => $dto->email, "password" => $dto->password];
+        $user = User::where('email', $dto->email)->first();
 
-        if (!Auth::attempt($credentials, $dto->remember)) {
+        if (!$user || !Hash::check($dto->password, $user->password)) {
             throw new AuthenticationException("The provided credentials are incorrect.");
         }
 
-        return Auth::user();
+        return $this->getUserData($user);
     }
 
     public function logout(Request $request)
     {
-        if ($request->wantsJson()) {
-            // API logout using Sanctum tokens
-            if ($request->user()) {
-                $request->user()->tokens()->delete();
-            }
-        } else {
-            // Web logout using session-based authentication
-            Auth::logout();
-            $request->session()->invalidate();
-            $request->session()->regenerateToken();
-        }
+        $request->user()->tokens()->delete();
+
+        return [
+            'message' => 'You are logged out',
+        ];
     }
 }

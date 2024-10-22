@@ -13,31 +13,28 @@ class AuthController extends Controller
 {
     public function __construct(protected AuthInterface $authService)
     {
-        //
     }
 
     public function register(RegisterRequest $request)
     {
-        $user = $this->authService->register(
+        $response = $this->authService->register(
             AuthDTO::fromApiRegisterRequest($request)
         );
-        $data = $this->authService->getUserData($user);
 
-        return response()->json($data, 201);
+        return response()->json($response, 201);
     }
 
     public function login(LoginRequest $request)
     {
-        $user = $this->authService->login(AuthDTO::loginRequest($request));
-        $data = $this->authService->getUserData($user);
+        $response = $this->authService->login(AuthDTO::loginRequest($request));
 
-        return response()->json($data, 201);
+        return response()->json($response, 201);
     }
 
     public function logout(Request $request)
     {
-        $this->authService->logout($request);
+        $response = $this->authService->logout($request);
 
-        return response()->json(["message" => "Successfully logged out"], 201);
+        return response()->json($response, 201);
     }
 }

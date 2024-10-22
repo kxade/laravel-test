@@ -5,14 +5,13 @@ namespace App\Http\Controllers;
 use App\Contracts\User\AuthInterface;
 use App\DTO\AuthDTO;
 use App\Http\Requests\Auth\LoginRequest;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
-use Illuminate\Validation\ValidationException;
 
 class LoginController extends Controller
 {
     public function __construct(protected AuthInterface $authService)
     {
-        //
     }
 
     public function index()
@@ -23,23 +22,21 @@ class LoginController extends Controller
     public function store(LoginRequest $request)
     {
         try {
-            $user = $this->authService->login(
+            $response = $this->authService->login(
                 AuthDTO::loginRequest($request)
             );
 
-            return redirect()->intended("user");
-        } catch (ValidationException $e) {
+            Auth::login($response['user']);
 
-            return back()->withErrors([
-                "failed" => "Не получилось найти пользователя с таким логином и паролем.",
-            ])->withInput();
+            return redirect()->route('home')->with('success', 'Login successful!');
+        } catch (\Exception $e) {
+            return back()->withErrors(['email' => $e->getMessage()]);
         }
     }
 
     public function logout(Request $request)
     {
-        $this->authService->logout($request);
-
-        return redirect("/");
+        Auth::logout();
+        return redirect()->route('home')->with('success', 'Logged out successfully.');
     }
 }
