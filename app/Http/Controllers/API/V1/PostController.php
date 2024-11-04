@@ -11,20 +11,13 @@ use App\DTO\PostDTO;
 use Illuminate\Routing\Controllers\Middleware;
 use Illuminate\Routing\Controllers\HasMiddleware;
 
-class PostController extends Controller implements HasMiddleware
+class PostController extends Controller
 {
     protected $postService;
 
     public function __construct(PostService $postService)
     {
         $this->postService = $postService;
-    }
-
-    public static function middleware()
-    {
-        return [
-            new Middleware('auth:sanctum', except: ['index', 'show'])
-        ];
     }
 
     public function index()
