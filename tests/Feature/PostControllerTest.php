@@ -126,4 +126,46 @@ class PostControllerTest extends TestCase
 
         $this->assertDatabaseHas('posts', ['id' => $post->id]);
     }
+
+    public function guest_can_view_public_posts()
+    {
+        $post = Post::factory(10)->create();
+
+
+    }
+
+    #[Test]
+    public function public_blog_index_displays_posts()
+    {
+        Post::factory()->count(5)->create(['published' => true]);
+        Post::factory()->count(2)->create(['published' => false]);
+
+        $response = $this->get(route('blog.index'));
+
+        $response->assertStatus(200)
+                 ->assertViewHas('posts', function ($posts) {
+                     return $posts->count() === 5;
+                 });
+    }
+
+    #[Test]
+    public function guest_can_view_single_public_post()
+    {
+        $post = Post::factory()->create(['published' => true]);
+
+        $response = $this->get(route('blog.show', $post));
+
+        $response->assertStatus(200)
+                 ->assertViewHas('post', $post);
+    }
+
+    #[Test]
+    public function unpublished_posts_are_not_accessible_publicly()
+    {
+        $post = Post::factory()->create(['published' => false]);
+
+        $response = $this->get(route('blog.show', $post));
+
+        $response->assertStatus(404); // or redirect, depending on your handling
+    }
 }
