@@ -13,16 +13,15 @@ use Illuminate\Routing\Controllers\HasMiddleware;
 
 class PostController extends Controller
 {
-    protected $postService;
-
-    public function __construct(PostService $postService)
+    public function __construct(private PostService $postService)
     {
-        $this->postService = $postService;
     }
 
     public function index()
     {
-        return PostResource::collection(Post::all()); 
+        $posts = $this->postService->getAllPosts();
+
+        return PostResource::collection($posts); 
     }
 
     public function store(PostRequest $request)
@@ -39,7 +38,8 @@ class PostController extends Controller
 
     public function show(int $post_id)
     {
-        return new PostResource(Post::findOrFail($post_id));
+        $post = $this->postService->showPost($post_id);
+        return new PostResource($post);
     }
 
     public function update(PostRequest $request, int $post_id)

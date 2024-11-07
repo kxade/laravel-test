@@ -24,5 +24,5 @@ Route::prefix('user')->middleware('auth')->group(function () {
 
 // Routes for blog
 Route::get('blog', [PostController::class, 'getPublicPosts'])->name('blog.index');
-Route::get('blog/{username}/posts/', [PostController::class, 'usernamePosts'])->name('posts.username');
-Route::get('blog/{post}', [PostController::class, 'showPublic'])->name('blog.show');
+Route::get('blog/{user:id}/posts/', [PostController::class, 'usernamePosts'])->name('posts.username');
+Route::get('blog/{post}', [PostController::class, 'showPublicPost'])->name('blog.show');

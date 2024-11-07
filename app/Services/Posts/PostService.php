@@ -4,6 +4,7 @@ namespace App\Services\Posts;
 
 use App\Contracts\Posts\UserPostInterface;
 use App\Models\Post;
+use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 use App\DTO\PostDTO;
 use Illuminate\Support\Facades\Gate;
@@ -13,15 +14,20 @@ use Carbon\Carbon;
 
 class PostService implements UserPostInterface
 {
-    public function getPosts(PostDTO $dto): \Illuminate\Contracts\Pagination\LengthAwarePaginator
+    public function getAllPosts()
     {
-        $query = Post::with('user');
+        return Post::all();
+    }
+
+    public function getFilteredPosts(PostDTO $dto): \Illuminate\Contracts\Pagination\LengthAwarePaginator
+    {
+        $query = Post::with('user')->where('published', true);
         
         if ($fromDate = $dto->fromDate ?? null) {
             $query->where('published_at', '>=', new Carbon($fromDate));
         }
         
-        if ($toDate = $dto->to_date ?? null) {
+        if ($toDate = $dto->toDate ?? null) {
             $query->where('published_at', '<=', new Carbon($toDate));
         }
         
@@ -44,10 +50,20 @@ class PostService implements UserPostInterface
     {
         return Auth::user()->posts()->latest()->paginate(6);
     }
+
+    public function getUsernamePosts($user)
+    {
+        return $user->posts()->latest()->paginate(6);
+    }
     
     public function showPost(int $post_id)
     {
         return Post::query()->findOrFail($post_id);
+    }
+
+    public function showPublicPost(int $post_id)
+    {
+        return Post::query()->where('published', true)->findOrFail($post_id);
     }
 
     public function store(PostDTO $dto): Post

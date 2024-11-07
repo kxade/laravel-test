@@ -73,19 +73,19 @@ class PostController extends Controller
         return back()->with('delete', 'Ваш пост был удален');
     }
 
-    public function usernamePosts(User $username)
+    public function usernamePosts(User $user)
     {
-        $userPosts = $this->postService->getPosts();
+        $userPosts = $this->postService->getUsernamePosts($user);
 
         return view('user.posts.username', [
             'posts' => $userPosts,
-            'user' => $username
+            'user' => $user
         ]);
     }
 
     public function getPublicPosts(FilterPostsRequest $request)
     {
-        $posts = $this->postService->getPosts(
+        $posts = $this->postService->getFilteredPosts(
             PostDTO::filterPostsRequest($request)
         );
 
@@ -93,9 +93,9 @@ class PostController extends Controller
     }
 
 
-    public function showPublic(int $post_id) 
+    public function showPublicPost(int $post_id) 
     {
-        $post = $this->postService->showPost($post_id);
+        $post = $this->postService->showPublicPost($post_id);
  
         return view('blog.show', compact('post'));
     }
