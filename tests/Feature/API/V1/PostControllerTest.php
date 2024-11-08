@@ -2,18 +2,17 @@
 
 namespace Tests\Feature\API\V1;
 
-use Illuminate\Foundation\Testing\RefreshDatabase;
-use Tests\TestCase;
-use App\Models\User;
-use App\Models\Post;
+use App\Models\{User, Post};
 use PHPUnit\Framework\Attributes\Test;
+use Tests\TestCase;
+use Illuminate\Foundation\Testing\RefreshDatabase;
 
 class PostControllerTest extends TestCase
 {
     use RefreshDatabase;
 
     #[Test]
-    public function user_can_create_a_post()
+    public function userCanCreateAPost()
     {
         $user = User::factory()->create();
 
@@ -28,12 +27,12 @@ class PostControllerTest extends TestCase
 
         $response->assertStatus(201)
                  ->assertJsonFragment(['message' => 'Post created successfully!']);
-        
+
         $this->assertDatabaseHas('posts', ['title' => 'Test Title']);
     }
 
     #[Test]
-    public function user_can_view_posts()
+    public function userCanViewPosts()
     {
         $user = User::factory()->create();
 
@@ -48,7 +47,7 @@ class PostControllerTest extends TestCase
     }
 
     #[Test]
-    public function user_can_view_a_post()
+    public function userCanViewAPost()
     {
         $user = User::factory()->create();
 
@@ -63,7 +62,7 @@ class PostControllerTest extends TestCase
     }
 
     #[Test]
-    public function user_can_update_his_post()
+    public function userCanUpdateHisPost()
     {
         $user = User::factory()->create();
         $post = Post::factory()->create(['user_id' => $user->id]);
@@ -81,11 +80,11 @@ class PostControllerTest extends TestCase
     }
 
     #[Test]
-    public function user_cant_update_anothers_post()
+    public function userCanNotUpdateAnothersPost()
     {
         $user = User::factory()->create(['id' => 1]);
         $post = Post::factory()->create(['user_id' => $user->id]);
-        
+
         $user2 = User::factory()->create(['id' => 2]);
         $this->actingAs($user2, 'sanctum');
 
@@ -100,7 +99,7 @@ class PostControllerTest extends TestCase
     }
 
     #[Test]
-    public function user_can_delete_a_post()
+    public function userCanDeleteAPost()
     {
         $user = User::factory()->create();
         $post = Post::factory()->create(['user_id' => $user->id]);
@@ -116,7 +115,7 @@ class PostControllerTest extends TestCase
     }
 
     #[Test]
-    public function user_cant_delete_anothers_post()
+    public function userCanNotDeleteAnothersPost()
     {
         $user = User::factory()->create();
         $post = Post::factory()->create(['user_id' => $user->id]);

@@ -2,18 +2,17 @@
 
 namespace Tests\Feature;
 
-use Illuminate\Foundation\Testing\RefreshDatabase;
-use Tests\TestCase;
-use App\Models\User;
-use App\Models\Post;
+use App\Models\{User, Post};
 use PHPUnit\Framework\Attributes\Test;
+use Tests\TestCase;
+use Illuminate\Foundation\Testing\RefreshDatabase;
 
 class PostControllerTest extends TestCase
 {
     use RefreshDatabase;
 
     #[Test]
-    public function user_can_view_posts()
+    public function userCanViewPosts()
     {
         $user = User::factory()->create();
         $this->actingAs($user);
@@ -27,7 +26,7 @@ class PostControllerTest extends TestCase
     }
 
     #[Test]
-    public function user_can_create_a_post()
+    public function userCanCreateAPost()
     {
         $user = User::factory()->create();
         $this->actingAs($user);
@@ -46,7 +45,7 @@ class PostControllerTest extends TestCase
     }
 
     #[Test]
-    public function user_can_view_a_single_post()
+    public function userCanViewASinglePost()
     {
         $user = User::factory()->create();
         $this->actingAs($user);
@@ -60,7 +59,7 @@ class PostControllerTest extends TestCase
     }
 
     #[Test]
-    public function user_can_update_his_post()
+    public function userCanUpdateHisPost()
     {
         $user = User::factory()->create();
         $this->actingAs($user);
@@ -78,11 +77,11 @@ class PostControllerTest extends TestCase
     }
 
     #[Test]
-    public function user_cant_update_anothers_post()
+    public function userCanNotUpdateAnothersPost()
     {
         $user = User::factory()->create(['id' => 1]);
         $post = Post::factory()->create(['user_id' => $user->id]);
-        
+
         $user2 = User::factory()->create(['id' => 2]);
         $this->actingAs($user2);
 
@@ -96,7 +95,7 @@ class PostControllerTest extends TestCase
     }
 
     #[Test]
-    public function user_can_delete_his_post()
+    public function userCanDeleteHisPost()
     {
         $user = User::factory()->create();
         $this->actingAs($user);
@@ -112,11 +111,11 @@ class PostControllerTest extends TestCase
     }
 
     #[Test]
-    public function user_cant_delete_anothers_post()
+    public function userCanNotDeleteAnothersPost()
     {
         $user = User::factory()->create(['id' => 1]);
         $post = Post::factory()->create(['user_id' => $user->id]);
-        
+
         $user2 = User::factory()->create(['id' => 2]);
         $this->actingAs($user2);
 
@@ -127,15 +126,8 @@ class PostControllerTest extends TestCase
         $this->assertDatabaseHas('posts', ['id' => $post->id]);
     }
 
-    public function guest_can_view_public_posts()
-    {
-        $post = Post::factory(10)->create();
-
-
-    }
-
     #[Test]
-    public function public_blog_index_displays_posts()
+    public function publicBlogIndexDisplaysPosts()
     {
         Post::factory()->count(5)->create(['published' => true]);
         Post::factory()->count(2)->create(['published' => false]);
@@ -149,7 +141,7 @@ class PostControllerTest extends TestCase
     }
 
     #[Test]
-    public function guest_can_view_single_public_post()
+    public function guestCanViewSinglePublicPost()
     {
         $post = Post::factory()->create(['published' => true]);
 
@@ -160,7 +152,7 @@ class PostControllerTest extends TestCase
     }
 
     #[Test]
-    public function unpublished_posts_are_not_accessible_publicly()
+    public function unpublishedPostsAreNotAccessiblePublicly()
     {
         $post = Post::factory()->create(['published' => false]);
 

@@ -3,14 +3,10 @@
 namespace App\Services\Posts;
 
 use App\Contracts\Posts\UserPostInterface;
-use App\Models\Post;
-use App\Models\User;
-use Illuminate\Support\Facades\Auth;
 use App\DTO\PostDTO;
-use Illuminate\Support\Facades\Gate;
+use App\Models\Post;
 use Carbon\Carbon;
-
-
+use Illuminate\Support\Facades\{Auth, Gate};
 
 class PostService implements UserPostInterface
 {
@@ -22,24 +18,24 @@ class PostService implements UserPostInterface
     public function getFilteredPosts(PostDTO $dto): \Illuminate\Contracts\Pagination\LengthAwarePaginator
     {
         $query = Post::with('user')->where('published', true);
-        
+
         if ($fromDate = $dto->fromDate ?? null) {
             $query->where('published_at', '>=', new Carbon($fromDate));
         }
-        
+
         if ($toDate = $dto->toDate ?? null) {
             $query->where('published_at', '<=', new Carbon($toDate));
         }
-        
+
         if ($search = $dto->search ?? null) {
             $query->where('title', 'ilike', "%{$search}%")
             ->orWhere('content', 'ilike', "%{$search}%");
         }
-        
+
         if ($tag = $dto->tag ?? null) {
             $query->whereJsonContains('tags', $tag);
         }
-        
+
         return $query->where('published', true)
         ->whereNotNull('published_at')
         ->orderBy('id', 'asc')
@@ -55,7 +51,7 @@ class PostService implements UserPostInterface
     {
         return $user->posts()->latest()->paginate(6);
     }
-    
+
     public function showPost(int $post_id)
     {
         return Post::query()->findOrFail($post_id);
@@ -105,7 +101,7 @@ class PostService implements UserPostInterface
     public function delete(int $post_id)
     {
         $post = Post::query()->findOrFail($post_id);
-        
+
         Gate::authorize('modify', $post);
 
         $post->delete();

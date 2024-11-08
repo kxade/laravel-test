@@ -1,9 +1,9 @@
 <?php
+
 namespace App\DTO;
 
 use App\Enums\PostSource;
-use App\Http\Requests\Posts\PostRequest;
-use App\Http\Requests\Posts\FilterPostsRequest;
+use App\Http\Requests\Posts\{PostRequest, FilterPostsRequest};
 
 readonly class PostDTO
 {
@@ -18,8 +18,7 @@ readonly class PostDTO
         public ?string $toDate,
         public ?string $search,
         public ?string $tag,
-    ) 
-    {
+    ) {
     }
 
     private static function postRequest(PostRequest $request, PostSource $source): self

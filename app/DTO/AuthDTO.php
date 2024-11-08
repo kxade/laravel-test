@@ -14,8 +14,7 @@ readonly class AuthDTO
         public string $password,
         public bool $remember = false,
         public bool $agreement = false,
-    )
-    {
+    ) {
     }
 
     public static function fromAppRegisterRequest(AppRegisterRequest $request): AuthDTO
@@ -38,7 +37,7 @@ readonly class AuthDTO
     }
 
     public static function loginRequest(LoginRequest $request): AuthDTO
-    {   
+    {
         return new self(
             name: null,  // No name for login
             email: $request->validated('email'),

@@ -2,11 +2,10 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use App\Enums\PostSource;
-
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Model;
 
 class Post extends Model
 {
@@ -28,11 +27,12 @@ class Post extends Model
     ];
 
 
-    public function isPublished(): bool {
-        return $this->published && $this->published_at; 
+    public function isPublished(): bool
+    {
+        return $this->published && $this->published_at;
     }
 
-    public function user(): BelongsTo 
+    public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);
     }

@@ -2,14 +2,11 @@
 
 namespace App\Http\Controllers\API\V1;
 
+use App\DTO\PostDTO;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\PostResource;
-use App\Models\Post;
-use App\Services\Posts\PostService;
 use App\Http\Requests\Posts\PostRequest;
-use App\DTO\PostDTO;
-use Illuminate\Routing\Controllers\Middleware;
-use Illuminate\Routing\Controllers\HasMiddleware;
+use App\Services\Posts\PostService;
 
 class PostController extends Controller
 {
@@ -21,7 +18,7 @@ class PostController extends Controller
     {
         $posts = $this->postService->getAllPosts();
 
-        return PostResource::collection($posts); 
+        return PostResource::collection($posts);
     }
 
     public function store(PostRequest $request)
@@ -29,7 +26,7 @@ class PostController extends Controller
         $post = $this->postService->store(
             PostDTO::fromApiRequest($request)
         );
-        
+
         return response()->json([
             'message' => 'Post created successfully!',
             'post' => PostResource::make($post)
@@ -48,7 +45,7 @@ class PostController extends Controller
             PostDTO::fromApiRequest($request),
             $post_id,
         );
-        
+
         return response()->json([
             'message' => 'Post updated successfully!',
             'post' => PostResource::make($updatedPost)

@@ -2,17 +2,17 @@
 
 namespace Tests\Feature;
 
-use Illuminate\Foundation\Testing\RefreshDatabase;
-use Tests\TestCase;
 use App\Models\User;
 use PHPUnit\Framework\Attributes\Test;
+use Tests\TestCase;
+use Illuminate\Foundation\Testing\RefreshDatabase;
 
 class LoginControllerTest extends TestCase
 {
     use RefreshDatabase;
 
     #[Test]
-    public function login_index_page_works(): void
+    public function loginIndexPageWorks(): void
     {
         $response = $this->get(route('login'));
 
@@ -20,7 +20,7 @@ class LoginControllerTest extends TestCase
     }
 
     #[Test]
-    public function user_can_login()
+    public function userCanLogin()
     {
         $user = User::factory()->create([
             'password' => bcrypt('password123'),
@@ -36,7 +36,7 @@ class LoginControllerTest extends TestCase
     }
 
     #[Test]
-    public function login_fails_with_invalid_credentials()
+    public function loginFailsWithInvalidCredentials()
     {
         $user = User::factory()->create([
             'password' => bcrypt('password123'),
@@ -52,7 +52,7 @@ class LoginControllerTest extends TestCase
     }
 
     #[Test]
-    public function user_can_logout()
+    public function userCanLogout()
     {
         $user = User::factory()->create();
         $this->actingAs($user);

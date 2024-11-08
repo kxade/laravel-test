@@ -3,17 +3,16 @@
 namespace Tests\Feature\API\V1;
 
 use App\Models\User;
-use Illuminate\Foundation\Testing\RefreshDatabase;
-use Tests\TestCase;
 use PHPUnit\Framework\Attributes\Test;
-
+use Tests\TestCase;
+use Illuminate\Foundation\Testing\RefreshDatabase;
 
 class AuthControllerTest extends TestCase
 {
     use RefreshDatabase;
 
     #[Test]
-    public function registration_requires_valid_data_via_api()
+    public function registrationRequiresValidDataViaApi()
     {
         $response = $this->postJson('api/register', []);
 
@@ -22,7 +21,7 @@ class AuthControllerTest extends TestCase
     }
 
     #[Test]
-    public function user_can_register_via_api()
+    public function userCanRegisterViaApi()
     {
         $response = $this->postJson('api/register', [
             'name' => 'Test User',
@@ -38,7 +37,7 @@ class AuthControllerTest extends TestCase
     }
 
     #[Test]
-    public function user_can_login_via_api()
+    public function userCanLoginViaApi()
     {
         $user = User::factory()->create([
             'email' => 'test@example.com',
@@ -56,7 +55,7 @@ class AuthControllerTest extends TestCase
     }
 
     #[Test]
-    public function login_fails_with_invalid_credentials_via_api()
+    public function loginFailsWithInvalidCredentialsViaApi()
     {
         $user = User::factory()->create([
             'password' => bcrypt('password123'),
@@ -72,7 +71,7 @@ class AuthControllerTest extends TestCase
     }
 
     #[Test]
-    public function user_can_logout_via_api()
+    public function userCanLogoutViaApi()
     {
         $user = User::factory()->create();
 

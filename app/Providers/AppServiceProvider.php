@@ -2,12 +2,10 @@
 
 namespace App\Providers;
 
-use App\Contracts\Posts\BlogPostInterface;
-use App\Contracts\Posts\UserPostInterface;
 use App\Contracts\User\AuthInterface;
-use App\Services\Posts\BlogPostService;
-use App\Services\Posts\PostService;
+use App\Contracts\Posts\UserPostInterface;
 use App\Services\User\AuthService;
+use App\Services\Posts\PostService;
 use Illuminate\Pagination\Paginator;
 use Illuminate\Support\Facades\View;
 use Illuminate\Support\ServiceProvider;
@@ -19,7 +17,6 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register(): void
     {
-        $this->app->bind(BlogPostInterface::class, BlogPostService::class);
         $this->app->bind(UserPostInterface::class, PostService::class);
         $this->app->bind(AuthInterface::class, AuthService::class);
     }

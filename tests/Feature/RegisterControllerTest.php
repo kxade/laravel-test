@@ -2,17 +2,18 @@
 
 namespace Tests\Feature;
 
+use PHPUnit\Framework\Attributes\Test;
+use Tests\TestCase;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
-use Tests\TestCase;
-use PHPUnit\Framework\Attributes\Test;
 
 class RegisterControllerTest extends TestCase
 {
-    use RefreshDatabase, WithFaker;
+    use RefreshDatabase;
+    use WithFaker;
 
     #[Test]
-    public function registration_index_page_works(): void
+    public function registrationIndexPageWorks(): void
     {
         $response = $this->get(route('register'));
 
@@ -20,8 +21,8 @@ class RegisterControllerTest extends TestCase
     }
 
     #[Test]
-    public function user_can_register()
-    {   
+    public function userCanRegister()
+    {
         $data = [
             'name' => $this->faker->name,
             'email' => $this->faker->unique()->safeEmail,
@@ -39,10 +40,10 @@ class RegisterControllerTest extends TestCase
     }
 
     #[Test]
-    public function registration_requires_valid_data()
+    public function registrationRequiresValidData()
     {
         $response = $this->post(route('register.store'), []);
-    
+
         $response->assertSessionHasErrors(['name', 'email', 'password']);
     }
 }

@@ -3,14 +3,13 @@
 namespace App\Contracts\Posts;
 
 use App\DTO\PostDTO;
-use App\Models\Post;
 
 interface UserPostInterface
 {
     public function getAllPosts();
 
     public function getFilteredPosts(PostDTO $dto);
-    
+
     public function getUserPosts();
 
     public function getUsernamePosts($user);
